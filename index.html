@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Science Quiz Game</title>
+    <title>Science Quiz Challenge</title>
     <style>
         * {
             box-sizing: border-box;
@@ -55,20 +55,22 @@
             color: #2c3e50;
         }
         
+        /* Vertical Options Layout */
         .options {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
+            flex-direction: column;
             gap: 12px;
             margin-bottom: 25px;
         }
         
         .option {
-            padding: 12px;
+            padding: 15px;
             background-color: #f8f9fa;
             border: 2px solid #e9ecef;
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
+            text-align: center;
         }
         
         .option:hover {
@@ -92,6 +94,38 @@
             background-color: #fa5252;
             color: white;
             border-color: #e03131;
+        }
+        
+        /* Timer Styles */
+        .timer-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .timer {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #4c6ef5;
+            color: white;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            min-width: 80px;
+        }
+        
+        .timer.warning {
+            background: #ff922b;
+        }
+        
+        .timer.danger {
+            background: #fa5252;
+            animation: pulse 0.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
         
         .navigation {
@@ -174,37 +208,50 @@
         .incorrect-feedback {
             color: #e03131;
         }
+        
+        .question-counter {
+            font-weight: 600;
+            color: #4c6ef5;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Science Quiz Challenge</h1>
-        <p class="description">Test your knowledge of science with this interactive quiz. Select the correct answer for each question and see your score at the end!</p>
+        <h1>Science Quiz Challenge ⚡</h1>
+        <p class="description">Test your science knowledge! 30 seconds per question. Choose wisely! 🧠</p>
         
         <div class="progress">
             <div class="progress-bar" id="progress-bar"></div>
         </div>
         
+        <div class="timer-container">
+            <div class="timer" id="timer">30s</div>
+        </div>
+        
         <div class="quiz-container" id="quiz-container">
+            <div class="question-counter" id="question-counter"></div>
             <div class="question" id="question"></div>
             <div class="options" id="options"></div>
             <div class="feedback" id="feedback"></div>
             <div class="navigation">
                 <button id="prev-btn" disabled>Previous</button>
-                <button id="next-btn">Next</button>
+                <button id="next-btn">Next Question</button>
             </div>
         </div>
         
         <div class="result" id="result">
-            <h2>Quiz Completed!</h2>
+            <h2>Quiz Completed! 🎉</h2>
             <p>Your final score is:</p>
             <div class="score" id="score"></div>
-            <button class="restart" id="restart-btn">Play Again</button>
+            <button class="restart" id="restart-btn">Play Again 🔄</button>
         </div>
     </div>
 
     <script>
-        // Quiz data
+        // Quiz data - 15 SCIENCE QUESTIONS!
         const questions = [
             {
                 question: "How many elements are in the periodic table?",
@@ -230,6 +277,56 @@
                 question: "Which planet in the solar system is the hottest?",
                 options: ["Mercury", "Venus", "Earth", "Mars"],
                 answer: 1
+            },
+            {
+                question: "What is the chemical symbol for gold?",
+                options: ["Go", "Gd", "Au", "Ag"],
+                answer: 2
+            },
+            {
+                question: "How many planets are in our solar system?",
+                options: ["7", "8", "9", "10"],
+                answer: 1
+            },
+            {
+                question: "What is the speed of light in vacuum?",
+                options: ["300,000 km/s", "150,000 km/s", "450,000 km/s", "600,000 km/s"],
+                answer: 0
+            },
+            {
+                question: "What force keeps planets in orbit around the sun?",
+                options: ["Magnetism", "Gravity", "Electricity", "Friction"],
+                answer: 1
+            },
+            {
+                question: "What is the most abundant element in the universe?",
+                options: ["Oxygen", "Carbon", "Hydrogen", "Helium"],
+                answer: 2
+            },
+            {
+                question: "How many chromosomes do humans have?",
+                options: ["23", "46", "52", "64"],
+                answer: 1
+            },
+            {
+                question: "Which organ pumps blood throughout the body?",
+                options: ["Liver", "Heart", "Brain", "Lungs"],
+                answer: 1
+            },
+            {
+                question: "What is the hardest natural substance on Earth?",
+                options: ["Gold", "Iron", "Diamond", "Platinum"],
+                answer: 2
+            },
+            {
+                question: "Which planet has the most moons?",
+                options: ["Jupiter", "Saturn", "Uranus", "Neptune"],
+                answer: 1
+            },
+            {
+                question: "What is a light-year a measure of?",
+                options: ["Time", "Distance", "Brightness", "Energy"],
+                answer: 1
             }
         ];
 
@@ -244,16 +341,21 @@
         const restartButton = document.getElementById('restart-btn');
         const scoreElement = document.getElementById('score');
         const progressBar = document.getElementById('progress-bar');
+        const timerElement = document.getElementById('timer');
+        const questionCounterElement = document.getElementById('question-counter');
 
         // Quiz state
         let currentQuestion = 0;
         let score = 0;
         let userAnswers = new Array(questions.length).fill(null);
+        let timer;
+        let timeLeft = 30;
 
         // Initialize the quiz
         function initQuiz() {
             showQuestion();
             updateProgressBar();
+            updateQuestionCounter();
             
             // Add event listeners
             prevButton.addEventListener('click', goToPreviousQuestion);
@@ -261,10 +363,55 @@
             restartButton.addEventListener('click', restartQuiz);
         }
 
+        // Timer functions
+        function startTimer() {
+            timeLeft = 30;
+            updateTimerDisplay();
+            
+            clearInterval(timer);
+            timer = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    skipQuestion();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            timerElement.textContent = `${timeLeft}s`;
+            
+            // Change color based on time
+            timerElement.className = 'timer';
+            if (timeLeft <= 10) {
+                timerElement.classList.add('danger');
+            } else if (timeLeft <= 20) {
+                timerElement.classList.add('warning');
+            }
+        }
+
+        function skipQuestion() {
+            // Mark as unanswered
+            userAnswers[currentQuestion] = null;
+            feedbackElement.textContent = "Time's up! ⏰ Moving to next question...";
+            feedbackElement.className = 'feedback incorrect-feedback';
+            
+            // Auto-proceed after 2 seconds
+            setTimeout(() => {
+                goToNextQuestion();
+            }, 2000);
+        }
+
+        function stopTimer() {
+            clearInterval(timer);
+        }
+
         // Show current question
         function showQuestion() {
             const question = questions[currentQuestion];
-            questionElement.textContent = `${currentQuestion + 1}. ${question.question}`;
+            questionElement.textContent = question.question;
             
             // Clear previous options
             optionsElement.innerHTML = '';
@@ -295,14 +442,26 @@
             prevButton.disabled = currentQuestion === 0;
             
             if (currentQuestion === questions.length - 1) {
-                nextButton.textContent = 'Finish';
+                nextButton.textContent = 'Finish Quiz';
             } else {
-                nextButton.textContent = 'Next';
+                nextButton.textContent = 'Next Question';
             }
+            
+            // Start timer for this question
+            stopTimer();
+            startTimer();
+            
+            // Update question counter
+            updateQuestionCounter();
             
             // Clear feedback
             feedbackElement.textContent = '';
             feedbackElement.className = 'feedback';
+        }
+
+        // Update question counter
+        function updateQuestionCounter() {
+            questionCounterElement.textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
         }
 
         // Select an option
@@ -310,16 +469,17 @@
             // If already answered, do nothing
             if (userAnswers[currentQuestion] !== null) return;
             
+            stopTimer(); // Stop timer when answer is selected
             userAnswers[currentQuestion] = optionIndex;
             const question = questions[currentQuestion];
             
             // Check if correct
             if (optionIndex === question.answer) {
                 score++;
-                feedbackElement.textContent = 'Correct!';
+                feedbackElement.textContent = 'Correct! ✅';
                 feedbackElement.className = 'feedback correct-feedback';
             } else {
-                feedbackElement.textContent = `Incorrect! The correct answer is: ${question.options[question.answer]}`;
+                feedbackElement.textContent = `Incorrect! ❌ The correct answer is: ${question.options[question.answer]}`;
                 feedbackElement.className = 'feedback incorrect-feedback';
             }
             
@@ -342,6 +502,7 @@
 
         // Go to next question
         function goToNextQuestion() {
+            stopTimer(); // Stop timer when moving questions
             if (currentQuestion < questions.length - 1) {
                 currentQuestion++;
                 showQuestion();
@@ -353,6 +514,7 @@
 
         // Go to previous question
         function goToPreviousQuestion() {
+            stopTimer(); // Stop timer when moving back
             if (currentQuestion > 0) {
                 currentQuestion--;
                 showQuestion();
@@ -377,6 +539,7 @@
 
         // Restart quiz
         function restartQuiz() {
+            stopTimer(); // Stop timer on restart
             currentQuestion = 0;
             score = 0;
             userAnswers.fill(null);
