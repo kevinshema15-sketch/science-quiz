@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Science Quiz Challenge</title>
+    <title>Science Quiz Challenges</title>
     <style>
         * {
             box-sizing: border-box;
@@ -11,513 +11,607 @@
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             padding: 20px;
+            color: #333;
         }
-        
+
         .container {
-            background-color: white;
+            width: 100%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            max-width: 600px;
-            padding: 30px;
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #4ca1af 0%, #2c3e50 100%);
+            color: white;
+            padding: 20px;
             text-align: center;
         }
-        
+
         h1 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
         }
-        
-        .description {
-            color: #666;
-            margin-bottom: 30px;
+
+        .subtitle {
             font-size: 1.1rem;
-            line-height: 1.5;
+            opacity: 0.9;
         }
-        
-        .quiz-container {
+
+        .quiz-content {
+            padding: 30px;
+        }
+
+        .login-screen, .welcome-screen, .quiz-screen, .results-screen {
+            text-align: center;
+        }
+
+        .login-screen {
+            display: block;
+        }
+
+        .welcome-screen, .quiz-screen, .results-screen {
+            display: none;
+        }
+
+        .welcome-screen p {
+            margin: 20px 0;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
             text-align: left;
         }
-        
-        .question {
-            font-size: 1.3rem;
+
+        label {
+            display: block;
+            margin-bottom: 8px;
             font-weight: 600;
-            margin-bottom: 15px;
-            color: #2c3e50;
         }
-        
-        /* Vertical Options Layout */
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-        
-        .option {
-            padding: 15px;
-            background-color: #f8f9fa;
-            border: 2px solid #e9ecef;
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
             border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
+            font-size: 1rem;
+            transition: border-color 0.3s;
         }
-        
-        .option:hover {
-            background-color: #e9ecef;
-            transform: translateY(-2px);
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #4ca1af;
+            outline: none;
         }
-        
-        .option.selected {
-            background-color: #4c6ef5;
-            color: white;
-            border-color: #3b5bdb;
-        }
-        
-        .option.correct {
-            background-color: #40c057;
-            color: white;
-            border-color: #2f9e44;
-        }
-        
-        .option.incorrect {
-            background-color: #fa5252;
-            color: white;
-            border-color: #e03131;
-        }
-        
-        /* Timer Styles */
-        .timer-container {
-            text-align: center;
-            margin: 20px 0;
-        }
-        
-        .timer {
-            display: inline-block;
-            padding: 10px 20px;
-            background: #4c6ef5;
-            color: white;
-            border-radius: 25px;
-            font-weight: bold;
-            font-size: 1.2rem;
-            min-width: 80px;
-        }
-        
-        .timer.warning {
-            background: #ff922b;
-        }
-        
-        .timer.danger {
-            background: #fa5252;
-            animation: pulse 0.5s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-        
-        .navigation {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-        
-        button {
+
+        .btn {
             padding: 12px 25px;
-            background-color: #4c6ef5;
+            background: linear-gradient(135deg, #4ca1af 0%, #2c3e50 100%);
             color: white;
             border: none;
-            border-radius: 8px;
-            cursor: pointer;
+            border-radius: 50px;
             font-size: 1rem;
-            font-weight: 600;
-            transition: background-color 0.3s;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
         }
-        
-        button:hover {
-            background-color: #3b5bdb;
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
-        
-        button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
+
+        .btn:active {
+            transform: translateY(0);
         }
-        
-        .result {
-            display: none;
-            text-align: center;
-            padding: 20px;
-        }
-        
-        .score {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #4c6ef5;
-            margin: 20px 0;
-        }
-        
-        .restart {
-            margin-top: 20px;
-            background-color: #40c057;
-        }
-        
-        .restart:hover {
-            background-color: #2f9e44;
-        }
-        
+
         .progress {
             height: 10px;
-            background-color: #e9ecef;
+            background: #f0f0f0;
             border-radius: 5px;
             margin-bottom: 20px;
             overflow: hidden;
         }
-        
+
         .progress-bar {
             height: 100%;
-            background-color: #4c6ef5;
+            background: linear-gradient(135deg, #4ca1af 0%, #2c3e50 100%);
             width: 0%;
             transition: width 0.3s ease;
         }
-        
-        .feedback {
-            height: 50px;
+
+        .question-number {
+            font-size: 1rem;
+            margin-bottom: 5px;
+            color: #666;
+        }
+
+        .question-text {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .option {
+            padding: 15px;
+            background: #f8f8f8;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .option:hover {
+            background: #eef;
+            border-color: #4ca1af;
+        }
+
+        .option.selected {
+            background: #d1ecf1;
+            border-color: #0c5460;
+        }
+
+        .option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+
+        .option.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .score-text {
+            font-size: 1.8rem;
+            margin: 20px 0;
+            color: #2c3e50;
+        }
+
+        .score-value {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #4ca1af;
+            margin-bottom: 30px;
+        }
+
+        .message {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .question-review {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .review-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .review-question {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .review-answer {
+            color: #28a745;
+        }
+
+        .review-incorrect {
+            color: #dc3545;
+        }
+
+        .timer {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        .user-info {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 50px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #4ca1af 0%, #2c3e50 100%);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 600;
-            margin: 15px 0;
+            color: white;
+            font-weight: bold;
         }
-        
-        .correct-feedback {
-            color: #2f9e44;
+
+        .logout-btn {
+            background: none;
+            border: none;
+            color: #667eea;
+            cursor: pointer;
+            font-size: 0.9rem;
         }
-        
-        .incorrect-feedback {
-            color: #e03131;
-        }
-        
-        .question-counter {
-            font-weight: 600;
-            color: #4c6ef5;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-            text-align: center;
+
+        @media (min-width: 768px) {
+            .options {
+                grid-template-columns: 1fr 1fr;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="user-info" id="userInfo" style="display: none;">
+        <div class="avatar" id="userAvatar"></div>
+        <span id="userName"></span>
+        <button class="logout-btn" id="logoutBtn">Logout</button>
+    </div>
+
     <div class="container">
-        <h1>Science Quiz Challenge ⚡</h1>
-        <p class="description">Test your science knowledge! 30 seconds per question. Choose wisely! 🧠</p>
+        <header>
+            <h1>Science Quiz Challenges</h1>
+            <p class="subtitle">Test your knowledge of scientific concepts</p>
+        </header>
         
-        <div class="progress">
-            <div class="progress-bar" id="progress-bar"></div>
-        </div>
-        
-        <div class="timer-container">
-            <div class="timer" id="timer">30s</div>
-        </div>
-        
-        <div class="quiz-container" id="quiz-container">
-            <div class="question-counter" id="question-counter"></div>
-            <div class="question" id="question"></div>
-            <div class="options" id="options"></div>
-            <div class="feedback" id="feedback"></div>
-            <div class="navigation">
-                <button id="prev-btn" disabled>Previous</button>
-                <button id="next-btn">Next Question</button>
+        <div class="quiz-content">
+            <!-- Login Screen -->
+            <div class="login-screen" id="loginScreen">
+                <h2>Login to Start the Quiz</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" placeholder="Enter your username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="Enter your email" required>
+                    </div>
+                    <button type="submit" class="btn">Start Quiz</button>
+                </form>
             </div>
-        </div>
-        
-        <div class="result" id="result">
-            <h2>Quiz Completed! 🎉</h2>
-            <p>Your final score is:</p>
-            <div class="score" id="score"></div>
-            <button class="restart" id="restart-btn">Play Again 🔄</button>
+            
+            <!-- Welcome Screen -->
+            <div class="welcome-screen" id="welcomeScreen">
+                <h2>Welcome, <span id="displayName"></span>!</h2>
+                <p>This quiz will test your knowledge across various scientific disciplines including physics, chemistry, biology, and astronomy.</p>
+                <p>You will be presented with 10 multiple-choice questions. Select the best answer for each question and see how well you score at the end!</p>
+                <button class="btn" id="startBtn">Start Quiz</button>
+            </div>
+            
+            <!-- Quiz Screen -->
+            <div class="quiz-screen" id="quizScreen">
+                <div class="progress">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                <div class="timer" id="timer">Time: 00:00</div>
+                <div class="question-number" id="questionNumber">Question 1 of 10</div>
+                <div class="question-text" id="questionText">What is the chemical symbol for gold?</div>
+                
+                <div class="options" id="optionsContainer">
+                    <div class="option" data-index="0">Au</div>
+                    <div class="option" data-index="1">Ag</div>
+                    <div class="option" data-index="2">Fe</div>
+                    <div class="option" data-index="3">Go</div>
+                </div>
+                
+                <div class="navigation">
+                    <button class="btn" id="prevBtn">Previous</button>
+                    <button class="btn" id="nextBtn">Next</button>
+                </div>
+            </div>
+            
+            <!-- Results Screen -->
+            <div class="results-screen" id="resultsScreen">
+                <h2>Quiz Completed!</h2>
+                <div class="score-text">Your Score:</div>
+                <div class="score-value" id="scoreValue">0/10</div>
+                <div class="message" id="message">Thanks for taking the Science Quiz Challenge!</div>
+                
+                <div class="question-review" id="questionReview">
+                    <!-- Question review will be inserted here -->
+                </div>
+                
+                <button class="btn" id="restartBtn">Try Again</button>
+            </div>
         </div>
     </div>
 
     <script>
-        // Quiz data - 15 SCIENCE QUESTIONS!
+        // Quiz questions
         const questions = [
             {
-                question: "How many elements are in the periodic table?",
-                options: ["116", "117", "118", "119"],
-                answer: 2
-            },
-            {
-                question: "Which animal lays the largest eggs?",
-                options: ["Whale", "Crocodile", "Elephant", "Ostrich"],
-                answer: 3
-            },
-            {
-                question: "What is the most abundant gas in Earth's atmosphere?",
-                options: ["Nitrogen", "Oxygen", "Carbon-Dioxide", "Hydrogen"],
-                answer: 0
-            },
-            {
-                question: "How many bones are in the human body?",
-                options: ["206", "207", "208", "209"],
-                answer: 0
-            },
-            {
-                question: "Which planet in the solar system is the hottest?",
-                options: ["Mercury", "Venus", "Earth", "Mars"],
-                answer: 1
-            },
-            {
                 question: "What is the chemical symbol for gold?",
-                options: ["Go", "Gd", "Au", "Ag"],
-                answer: 2
+                options: ["Au", "Ag", "Fe", "Go"],
+                answer: 0,
+                explanation: "Gold's chemical symbol is Au, derived from the Latin word 'aurum' meaning gold."
             },
             {
-                question: "How many planets are in our solar system?",
-                options: ["7", "8", "9", "10"],
-                answer: 1
+                question: "Which planet is known as the Red Planet?",
+                options: ["Venus", "Mars", "Jupiter", "Saturn"],
+                answer: 1,
+                explanation: "Mars is often called the Red Planet due to its reddish appearance, which is caused by iron oxide (rust) on its surface."
             },
             {
-                question: "What is the speed of light in vacuum?",
-                options: ["300,000 km/s", "150,000 km/s", "450,000 km/s", "600,000 km/s"],
-                answer: 0
+                question: "What is the smallest unit of life?",
+                options: ["Atom", "Cell", "Molecule", "Organelle"],
+                answer: 1,
+                explanation: "The cell is the smallest unit of life that can replicate independently, and is often called the 'building block of life'."
             },
             {
-                question: "What force keeps planets in orbit around the sun?",
-                options: ["Magnetism", "Gravity", "Electricity", "Friction"],
-                answer: 1
+                question: "What is the speed of light in a vacuum?",
+                options: ["299,792 km/s", "150,000 km/s", "450,000 km/s", "100,000 km/s"],
+                answer: 0,
+                explanation: "The speed of light in a vacuum is exactly 299,792 kilometers per second, which is a fundamental constant in physics."
             },
             {
-                question: "What is the most abundant element in the universe?",
-                options: ["Oxygen", "Carbon", "Hydrogen", "Helium"],
-                answer: 2
+                question: "Which gas do plants absorb from the atmosphere?",
+                options: ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"],
+                answer: 2,
+                explanation: "Plants absorb carbon dioxide (CO₂) from the atmosphere during photosynthesis to produce glucose and oxygen."
             },
             {
-                question: "How many chromosomes do humans have?",
-                options: ["23", "46", "52", "64"],
-                answer: 1
+                question: "What is the main component of the Sun?",
+                options: ["Helium", "Hydrogen", "Oxygen", "Carbon"],
+                answer: 1,
+                explanation: "The Sun is primarily composed of hydrogen (about 74% by mass) which fuels the nuclear fusion reactions at its core."
             },
             {
-                question: "Which organ pumps blood throughout the body?",
-                options: ["Liver", "Heart", "Brain", "Lungs"],
-                answer: 1
+                question: "Which subatomic particle has a negative charge?",
+                options: ["Proton", "Neutron", "Electron", "Photon"],
+                answer: 2,
+                explanation: "Electrons carry a negative electric charge, while protons are positively charged and neutrons have no charge."
             },
             {
                 question: "What is the hardest natural substance on Earth?",
                 options: ["Gold", "Iron", "Diamond", "Platinum"],
-                answer: 2
+                answer: 2,
+                explanation: "Diamond is the hardest known natural material, scoring a 10 on the Mohs scale of mineral hardness."
             },
             {
-                question: "Which planet has the most moons?",
-                options: ["Jupiter", "Saturn", "Uranus", "Neptune"],
-                answer: 1
+                question: "Which scientist proposed the theory of relativity?",
+                options: ["Isaac Newton", "Niels Bohr", "Albert Einstein", "Stephen Hawking"],
+                answer: 2,
+                explanation: "Albert Einstein developed the theory of relativity, which revolutionized our understanding of space, time, and gravity."
             },
             {
-                question: "What is a light-year a measure of?",
-                options: ["Time", "Distance", "Brightness", "Energy"],
-                answer: 1
+                question: "What is the pH value of pure water?",
+                options: ["5", "6", "7", "8"],
+                answer: 2,
+                explanation: "Pure water has a pH of 7, which is considered neutral on the pH scale."
             }
         ];
 
         // DOM elements
-        const quizContainer = document.getElementById('quiz-container');
-        const resultContainer = document.getElementById('result');
-        const questionElement = document.getElementById('question');
-        const optionsElement = document.getElementById('options');
-        const feedbackElement = document.getElementById('feedback');
-        const prevButton = document.getElementById('prev-btn');
-        const nextButton = document.getElementById('next-btn');
-        const restartButton = document.getElementById('restart-btn');
-        const scoreElement = document.getElementById('score');
-        const progressBar = document.getElementById('progress-bar');
-        const timerElement = document.getElementById('timer');
-        const questionCounterElement = document.getElementById('question-counter');
+        const loginScreen = document.getElementById('loginScreen');
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        const quizScreen = document.getElementById('quizScreen');
+        const resultsScreen = document.getElementById('resultsScreen');
+        const loginForm = document.getElementById('loginForm');
+        const startBtn = document.getElementById('startBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const restartBtn = document.getElementById('restartBtn');
+        const questionNumber = document.getElementById('questionNumber');
+        const questionText = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const progressBar = document.getElementById('progressBar');
+        const scoreValue = document.getElementById('scoreValue');
+        const message = document.getElementById('message');
+        const questionReview = document.getElementById('questionReview');
+        const timer = document.getElementById('timer');
+        const displayName = document.getElementById('displayName');
+        const userInfo = document.getElementById('userInfo');
+        const userName = document.getElementById('userName');
+        const userAvatar = document.getElementById('userAvatar');
+        const logoutBtn = document.getElementById('logoutBtn');
 
         // Quiz state
         let currentQuestion = 0;
-        let score = 0;
         let userAnswers = new Array(questions.length).fill(null);
-        let timer;
-        let timeLeft = 30;
+        let quizStarted = false;
+        let startTime;
+        let timerInterval;
+        let currentUser = null;
+
+        // Initialize the application
+        function initApp() {
+            // Check if user is already logged in (from localStorage)
+            const savedUser = localStorage.getItem('scienceQuizUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showWelcomeScreen();
+            }
+            
+            // Set up event listeners
+            loginForm.addEventListener('submit', handleLogin);
+            startBtn.addEventListener('click', startQuiz);
+            prevBtn.addEventListener('click', prevQuestion);
+            nextBtn.addEventListener('click', nextQuestion);
+            restartBtn.addEventListener('click', restartQuiz);
+            logoutBtn.addEventListener('click', handleLogout);
+        }
+
+        // Handle login form submission
+        function handleLogin(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            
+            if (username && email) {
+                // Save user info
+                currentUser = {
+                    username,
+                    email,
+                    avatar: username.charAt(0).toUpperCase()
+                };
+                
+                // Save to localStorage
+                localStorage.setItem('scienceQuizUser', JSON.stringify(currentUser));
+                
+                // Show welcome screen
+                showWelcomeScreen();
+            }
+        }
+
+        // Show welcome screen
+        function showWelcomeScreen() {
+            loginScreen.style.display = 'none';
+            welcomeScreen.style.display = 'block';
+            displayName.textContent = currentUser.username;
+            
+            // Update user info panel
+            userName.textContent = currentUser.username;
+            userAvatar.textContent = currentUser.avatar;
+            userInfo.style.display = 'flex';
+        }
+
+        // Handle logout
+        function handleLogout() {
+            currentUser = null;
+            localStorage.removeItem('scienceQuizUser');
+            
+            // Reset UI
+            userInfo.style.display = 'none';
+            welcomeScreen.style.display = 'none';
+            quizScreen.style.display = 'none';
+            resultsScreen.style.display = 'none';
+            loginScreen.style.display = 'block';
+            
+            // Reset form
+            loginForm.reset();
+        }
+
+        // Start the quiz
+        function startQuiz() {
+            welcomeScreen.style.display = 'none';
+            quizScreen.style.display = 'block';
+            initQuiz();
+        }
 
         // Initialize the quiz
         function initQuiz() {
-            showQuestion();
+            currentQuestion = 0;
+            userAnswers.fill(null);
+            displayQuestion();
             updateProgressBar();
-            updateQuestionCounter();
-            
-            // Add event listeners
-            prevButton.addEventListener('click', goToPreviousQuestion);
-            nextButton.addEventListener('click', goToNextQuestion);
-            restartButton.addEventListener('click', restartQuiz);
+            startTimer();
         }
 
-        // Timer functions
+        // Start timer
         function startTimer() {
-            timeLeft = 30;
-            updateTimerDisplay();
-            
-            clearInterval(timer);
-            timer = setInterval(() => {
-                timeLeft--;
-                updateTimerDisplay();
-                
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    skipQuestion();
-                }
-            }, 1000);
+            startTime = new Date();
+            timerInterval = setInterval(updateTimer, 1000);
         }
 
-        function updateTimerDisplay() {
-            timerElement.textContent = `${timeLeft}s`;
-            
-            // Change color based on time
-            timerElement.className = 'timer';
-            if (timeLeft <= 10) {
-                timerElement.classList.add('danger');
-            } else if (timeLeft <= 20) {
-                timerElement.classList.add('warning');
-            }
+        // Update timer
+        function updateTimer() {
+            const currentTime = new Date();
+            const elapsedTime = new Date(currentTime - startTime);
+            const minutes = elapsedTime.getMinutes().toString().padStart(2, '0');
+            const seconds = elapsedTime.getSeconds().toString().padStart(2, '0');
+            timer.textContent = `Time: ${minutes}:${seconds}`;
         }
 
-        function skipQuestion() {
-            // Mark as unanswered
-            userAnswers[currentQuestion] = null;
-            feedbackElement.textContent = "Time's up! ⏰ Moving to next question...";
-            feedbackElement.className = 'feedback incorrect-feedback';
-            
-            // Auto-proceed after 2 seconds
-            setTimeout(() => {
-                goToNextQuestion();
-            }, 2000);
-        }
-
+        // Stop timer
         function stopTimer() {
-            clearInterval(timer);
+            clearInterval(timerInterval);
         }
 
-        // Show current question
-        function showQuestion() {
+        // Display current question
+        function displayQuestion() {
             const question = questions[currentQuestion];
-            questionElement.textContent = question.question;
+            questionNumber.textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+            questionText.textContent = question.question;
             
             // Clear previous options
-            optionsElement.innerHTML = '';
+            optionsContainer.innerHTML = '';
             
-            // Create option elements
+            // Add new options
             question.options.forEach((option, index) => {
                 const optionElement = document.createElement('div');
-                optionElement.classList.add('option');
-                
-                // If user has already selected this option
+                optionElement.className = 'option';
                 if (userAnswers[currentQuestion] === index) {
                     optionElement.classList.add('selected');
-                    
-                    // Mark as correct or incorrect
-                    if (index === question.answer) {
-                        optionElement.classList.add('correct');
-                    } else {
-                        optionElement.classList.add('incorrect');
-                    }
                 }
-                
                 optionElement.textContent = option;
+                optionElement.setAttribute('data-index', index);
                 optionElement.addEventListener('click', () => selectOption(index));
-                optionsElement.appendChild(optionElement);
+                optionsContainer.appendChild(optionElement);
             });
             
             // Update navigation buttons
-            prevButton.disabled = currentQuestion === 0;
-            
-            if (currentQuestion === questions.length - 1) {
-                nextButton.textContent = 'Finish Quiz';
-            } else {
-                nextButton.textContent = 'Next Question';
-            }
-            
-            // Start timer for this question
-            stopTimer();
-            startTimer();
-            
-            // Update question counter
-            updateQuestionCounter();
-            
-            // Clear feedback
-            feedbackElement.textContent = '';
-            feedbackElement.className = 'feedback';
-        }
-
-        // Update question counter
-        function updateQuestionCounter() {
-            questionCounterElement.textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+            prevBtn.disabled = currentQuestion === 0;
+            nextBtn.textContent = currentQuestion === questions.length - 1 ? 'Finish' : 'Next';
         }
 
         // Select an option
-        function selectOption(optionIndex) {
-            // If already answered, do nothing
-            if (userAnswers[currentQuestion] !== null) return;
+        function selectOption(index) {
+            userAnswers[currentQuestion] = index;
             
-            stopTimer(); // Stop timer when answer is selected
-            userAnswers[currentQuestion] = optionIndex;
-            const question = questions[currentQuestion];
-            
-            // Check if correct
-            if (optionIndex === question.answer) {
-                score++;
-                feedbackElement.textContent = 'Correct! ✅';
-                feedbackElement.className = 'feedback correct-feedback';
-            } else {
-                feedbackElement.textContent = `Incorrect! ❌ The correct answer is: ${question.options[question.answer]}`;
-                feedbackElement.className = 'feedback incorrect-feedback';
-            }
-            
-            // Show correct and incorrect answers
-            const optionElements = optionsElement.querySelectorAll('.option');
-            optionElements.forEach((element, index) => {
-                if (index === question.answer) {
-                    element.classList.add('correct');
-                } else if (index === optionIndex && index !== question.answer) {
-                    element.classList.add('incorrect');
-                }
-                
-                // Disable further selection
-                element.style.pointerEvents = 'none';
-            });
-            
-            // Enable next button
-            nextButton.disabled = false;
+            // Update UI to show selected option
+            const options = optionsContainer.querySelectorAll('.option');
+            options.forEach(option => option.classList.remove('selected'));
+            options[index].classList.add('selected');
         }
 
-        // Go to next question
-        function goToNextQuestion() {
-            stopTimer(); // Stop timer when moving questions
+        // Navigate to next question
+        function nextQuestion() {
             if (currentQuestion < questions.length - 1) {
                 currentQuestion++;
-                showQuestion();
+                displayQuestion();
                 updateProgressBar();
             } else {
-                showResult();
+                finishQuiz();
             }
         }
 
-        // Go to previous question
-        function goToPreviousQuestion() {
-            stopTimer(); // Stop timer when moving back
+        // Navigate to previous question
+        function prevQuestion() {
             if (currentQuestion > 0) {
                 currentQuestion--;
-                showQuestion();
+                displayQuestion();
                 updateProgressBar();
             }
         }
@@ -528,31 +622,68 @@
             progressBar.style.width = `${progress}%`;
         }
 
-        // Show result
-        function showResult() {
-            quizContainer.style.display = 'none';
-            resultContainer.style.display = 'block';
+        // Finish the quiz and show results
+        function finishQuiz() {
+            stopTimer();
             
-            const percentage = (score / questions.length) * 100;
-            scoreElement.textContent = `${score}/${questions.length} (${percentage.toFixed(1)}%)`;
+            // Calculate score
+            const score = userAnswers.reduce((total, answer, index) => {
+                return total + (answer === questions[index].answer ? 1 : 0);
+            }, 0);
+            
+            // Display results
+            scoreValue.textContent = `${score}/${questions.length}`;
+            
+            // Set message based on score
+            if (score === questions.length) {
+                message.textContent = "Perfect! You're a science genius!";
+            } else if (score >= questions.length * 0.7) {
+                message.textContent = "Great job! You have excellent science knowledge!";
+            } else if (score >= questions.length * 0.5) {
+                message.textContent = "Good effort! Keep learning and try again!";
+            } else {
+                message.textContent = "Keep studying science! You'll do better next time!";
+            }
+            
+            // Generate question review
+            generateQuestionReview();
+            
+            // Show results screen
+            quizScreen.style.display = 'none';
+            resultsScreen.style.display = 'block';
         }
 
-        // Restart quiz
+        // Generate question review
+        function generateQuestionReview() {
+            questionReview.innerHTML = '<h3>Question Review:</h3>';
+            
+            questions.forEach((question, index) => {
+                const reviewItem = document.createElement('div');
+                reviewItem.className = 'review-item';
+                
+                const userAnswer = userAnswers[index];
+                const isCorrect = userAnswer === question.answer;
+                
+                reviewItem.innerHTML = `
+                    <div class="review-question">${index + 1}. ${question.question}</div>
+                    <div>Your answer: <span class="${isCorrect ? 'review-answer' : 'review-incorrect'}">${question.options[userAnswer] || 'Not answered'}</span></div>
+                    ${!isCorrect ? `<div>Correct answer: <span class="review-answer">${question.options[question.answer]}</span></div>` : ''}
+                    <div>Explanation: ${question.explanation}</div>
+                `;
+                
+                questionReview.appendChild(reviewItem);
+            });
+        }
+
+        // Restart the quiz
         function restartQuiz() {
-            stopTimer(); // Stop timer on restart
-            currentQuestion = 0;
-            score = 0;
-            userAnswers.fill(null);
-            
-            quizContainer.style.display = 'block';
-            resultContainer.style.display = 'none';
-            
-            showQuestion();
-            updateProgressBar();
+            resultsScreen.style.display = 'none';
+            quizScreen.style.display = 'block';
+            initQuiz();
         }
 
-        // Initialize the quiz when the page loads
-        window.onload = initQuiz;
+        // Initialize the application when the page loads
+        window.addEventListener('load', initApp);
     </script>
 </body>
 </html>
