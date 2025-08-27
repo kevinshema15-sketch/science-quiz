@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Science Quiz Challenges</title>
+    <title>Science Quiz Challenge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             box-sizing: border-box;
@@ -13,95 +14,106 @@
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             padding: 20px;
             color: #333;
         }
-
+        
         .container {
-            width: 100%;
-            max-width: 800px;
-            background: rgba(255, 255, 255, 0.9);
+            background-color: white;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
             overflow: hidden;
         }
-
+        
         header {
             background: linear-gradient(135deg, #4ca1af 0%, #2c3e50 100%);
             color: white;
-            padding: 20px;
+            padding: 25px;
             text-align: center;
         }
-
+        
         h1 {
             font-size: 2.2rem;
             margin-bottom: 10px;
         }
-
+        
         .subtitle {
             font-size: 1.1rem;
             opacity: 0.9;
         }
-
-        .quiz-content {
+        
+        .app-content {
             padding: 30px;
         }
-
-        .login-screen, .welcome-screen, .quiz-screen, .results-screen {
+        
+        .form-screen, .welcome-screen, .quiz-screen, .results-screen {
+            display: none;
             text-align: center;
         }
-
-        .login-screen {
+        
+        .active {
             display: block;
         }
-
-        .welcome-screen, .quiz-screen, .results-screen {
-            display: none;
-        }
-
-        .welcome-screen p {
-            margin: 20px 0;
-            font-size: 1.1rem;
-            line-height: 1.6;
-        }
-
+        
         .form-group {
             margin-bottom: 20px;
             text-align: left;
         }
-
+        
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
+            color: #444;
         }
-
-        input[type="text"],
-        input[type="email"],
-        input[type="password"] {
+        
+        input {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             border: 2px solid #ddd;
             border-radius: 8px;
             font-size: 1rem;
             transition: border-color 0.3s;
         }
-
-        input[type="text"]:focus,
-        input[type="email"]:focus,
-        input[type="password"]:focus {
+        
+        input:focus {
             border-color: #4ca1af;
             outline: none;
         }
-
+        
+        .input-icon {
+            position: relative;
+        }
+        
+        .input-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+        }
+        
+        .input-icon input {
+            padding-left: 45px;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            text-align: left;
+            display: none;
+        }
+        
         .btn {
-            padding: 12px 25px;
+            padding: 14px 25px;
             background: linear-gradient(135deg, #4ca1af 0%, #2c3e50 100%);
             color: white;
             border: none;
@@ -109,18 +121,45 @@
             font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin: 10px;
+            margin: 10px 5px;
+            width: 100%;
         }
-
+        
         .btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
-
+        
         .btn:active {
             transform: translateY(0);
         }
-
+        
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #444;
+            border: 1px solid #ddd;
+        }
+        
+        .toggle-form {
+            margin-top: 20px;
+            font-size: 0.95rem;
+            color: #666;
+        }
+        
+        .toggle-form a {
+            color: #4ca1af;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .welcome-screen p {
+            margin: 20px 0;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #555;
+        }
+        
         .progress {
             height: 10px;
             background: #f0f0f0;
@@ -128,33 +167,41 @@
             margin-bottom: 20px;
             overflow: hidden;
         }
-
+        
         .progress-bar {
             height: 100%;
             background: linear-gradient(135deg, #4ca1af 0%, #2c3e50 100%);
             width: 0%;
             transition: width 0.3s ease;
         }
-
+        
+        .timer {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+        
         .question-number {
             font-size: 1rem;
             margin-bottom: 5px;
             color: #666;
         }
-
+        
         .question-text {
             font-size: 1.4rem;
             margin-bottom: 25px;
             font-weight: 600;
+            color: #2c3e50;
         }
-
+        
         .options {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 15px;
+            gap: 12px;
             margin-bottom: 30px;
         }
-
+        
         .option {
             padding: 15px;
             background: #f8f8f8;
@@ -164,83 +211,52 @@
             transition: all 0.2s ease;
             text-align: left;
         }
-
+        
         .option:hover {
             background: #eef;
             border-color: #4ca1af;
         }
-
+        
         .option.selected {
             background: #d1ecf1;
             border-color: #0c5460;
         }
-
+        
         .option.correct {
             background: #d4edda;
             border-color: #28a745;
         }
-
+        
         .option.incorrect {
             background: #f8d7da;
             border-color: #dc3545;
         }
-
+        
         .navigation {
             display: flex;
             justify-content: space-between;
         }
-
+        
         .score-text {
             font-size: 1.8rem;
             margin: 20px 0;
             color: #2c3e50;
         }
-
+        
         .score-value {
             font-size: 3rem;
             font-weight: bold;
             color: #4ca1af;
             margin-bottom: 30px;
         }
-
+        
         .message {
             font-size: 1.2rem;
             margin-bottom: 30px;
             line-height: 1.6;
+            color: #555;
         }
-
-        .question-review {
-            margin-top: 20px;
-            text-align: left;
-        }
-
-        .review-item {
-            margin-bottom: 15px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-        }
-
-        .review-question {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .review-answer {
-            color: #28a745;
-        }
-
-        .review-incorrect {
-            color: #dc3545;
-        }
-
-        .timer {
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            color: #2c3e50;
-            font-weight: bold;
-        }
-
+        
         .user-info {
             position: absolute;
             top: 20px;
@@ -253,7 +269,7 @@
             align-items: center;
             gap: 10px;
         }
-
+        
         .avatar {
             width: 30px;
             height: 30px;
@@ -265,7 +281,7 @@
             color: white;
             font-weight: bold;
         }
-
+        
         .logout-btn {
             background: none;
             border: none;
@@ -273,10 +289,28 @@
             cursor: pointer;
             font-size: 0.9rem;
         }
-
-        @media (min-width: 768px) {
-            .options {
-                grid-template-columns: 1fr 1fr;
+        
+        @media (max-width: 600px) {
+            .container {
+                border-radius: 10px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .app-content {
+                padding: 20px;
+            }
+            
+            .question-text {
+                font-size: 1.2rem;
+            }
+            
+            .user-info {
+                top: 10px;
+                right: 10px;
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -290,25 +324,87 @@
 
     <div class="container">
         <header>
-            <h1>Science Quiz Challenges</h1>
+            <h1>Science Quiz Challenge</h1>
             <p class="subtitle">Test your knowledge of scientific concepts</p>
         </header>
         
-        <div class="quiz-content">
+        <div class="app-content">
             <!-- Login Screen -->
-            <div class="login-screen" id="loginScreen">
-                <h2>Login to Start the Quiz</h2>
-                <form id="loginForm">
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" id="username" placeholder="Enter your username" required>
+            <div class="form-screen active" id="loginScreen">
+                <h2>Login to Your Account</h2>
+                <p>Enter your credentials to access the quiz</p>
+                
+                <div class="form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <div class="input-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="loginEmail" placeholder="Enter your email" required>
                     </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" placeholder="Enter your email" required>
+                    <div class="error-message" id="loginEmailError">Please enter a valid email address</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <div class="input-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="loginPassword" placeholder="Enter your password" required>
                     </div>
-                    <button type="submit" class="btn">Start Quiz</button>
-                </form>
+                    <div class="error-message" id="loginPasswordError">Password is required</div>
+                </div>
+                
+                <button class="btn" id="loginBtn">Login</button>
+                
+                <div class="toggle-form">
+                    Don't have an account? <a id="showRegister">Register now</a>
+                </div>
+            </div>
+            
+            <!-- Registration Screen -->
+            <div class="form-screen" id="registerScreen">
+                <h2>Create an Account</h2>
+                <p>Register to start the science quiz</p>
+                
+                <div class="form-group">
+                    <label for="registerName">Full Name</label>
+                    <div class="input-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="registerName" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="error-message" id="registerNameError">Please enter your name</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerEmail">Email Address</label>
+                    <div class="input-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="registerEmail" placeholder="Enter your email" required>
+                    </div>
+                    <div class="error-message" id="registerEmailError">Please enter a valid email address</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <div class="input-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="registerPassword" placeholder="Create a password" required>
+                    </div>
+                    <div class="error-message" id="registerPasswordError">Password must be at least 6 characters</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerConfirmPassword">Confirm Password</label>
+                    <div class="input-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="registerConfirmPassword" placeholder="Confirm your password" required>
+                    </div>
+                    <div class="error-message" id="registerConfirmPasswordError">Passwords do not match</div>
+                </div>
+                
+                <button class="btn" id="registerBtn">Register</button>
+                
+                <div class="toggle-form">
+                    Already have an account? <a id="showLogin">Login here</a>
+                </div>
             </div>
             
             <!-- Welcome Screen -->
@@ -336,8 +432,8 @@
                 </div>
                 
                 <div class="navigation">
-                    <button class="btn" id="prevBtn">Previous</button>
-                    <button class="btn" id="nextBtn">Next</button>
+                    <button class="btn btn-secondary" id="prevBtn">Previous</button>
+                    <button class="btn" id="nextBtn">Next Question</button>
                 </div>
             </div>
             
@@ -347,11 +443,6 @@
                 <div class="score-text">Your Score:</div>
                 <div class="score-value" id="scoreValue">0/10</div>
                 <div class="message" id="message">Thanks for taking the Science Quiz Challenge!</div>
-                
-                <div class="question-review" id="questionReview">
-                    <!-- Question review will be inserted here -->
-                </div>
-                
                 <button class="btn" id="restartBtn">Try Again</button>
             </div>
         </div>
@@ -424,27 +515,38 @@
 
         // DOM elements
         const loginScreen = document.getElementById('loginScreen');
+        const registerScreen = document.getElementById('registerScreen');
         const welcomeScreen = document.getElementById('welcomeScreen');
         const quizScreen = document.getElementById('quizScreen');
         const resultsScreen = document.getElementById('resultsScreen');
-        const loginForm = document.getElementById('loginForm');
+        const loginBtn = document.getElementById('loginBtn');
+        const registerBtn = document.getElementById('registerBtn');
         const startBtn = document.getElementById('startBtn');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
         const restartBtn = document.getElementById('restartBtn');
+        const showRegister = document.getElementById('showRegister');
+        const showLogin = document.getElementById('showLogin');
         const questionNumber = document.getElementById('questionNumber');
         const questionText = document.getElementById('questionText');
         const optionsContainer = document.getElementById('optionsContainer');
         const progressBar = document.getElementById('progressBar');
         const scoreValue = document.getElementById('scoreValue');
         const message = document.getElementById('message');
-        const questionReview = document.getElementById('questionReview');
         const timer = document.getElementById('timer');
         const displayName = document.getElementById('displayName');
         const userInfo = document.getElementById('userInfo');
         const userName = document.getElementById('userName');
         const userAvatar = document.getElementById('userAvatar');
         const logoutBtn = document.getElementById('logoutBtn');
+
+        // Form validation elements
+        const loginEmailError = document.getElementById('loginEmailError');
+        const loginPasswordError = document.getElementById('loginPasswordError');
+        const registerNameError = document.getElementById('registerNameError');
+        const registerEmailError = document.getElementById('registerEmailError');
+        const registerPasswordError = document.getElementById('registerPasswordError');
+        const registerConfirmPasswordError = document.getElementById('registerConfirmPasswordError');
 
         // Quiz state
         let currentQuestion = 0;
@@ -461,30 +563,162 @@
             if (savedUser) {
                 currentUser = JSON.parse(savedUser);
                 showWelcomeScreen();
+            } else {
+                showScreen('loginScreen');
             }
             
             // Set up event listeners
-            loginForm.addEventListener('submit', handleLogin);
+            loginBtn.addEventListener('click', handleLogin);
+            registerBtn.addEventListener('click', handleRegister);
             startBtn.addEventListener('click', startQuiz);
             prevBtn.addEventListener('click', prevQuestion);
             nextBtn.addEventListener('click', nextQuestion);
             restartBtn.addEventListener('click', restartQuiz);
+            showRegister.addEventListener('click', () => showScreen('registerScreen'));
+            showLogin.addEventListener('click', () => showScreen('loginScreen'));
             logoutBtn.addEventListener('click', handleLogout);
+            
+            // Add input validation
+            setupFormValidation();
+        }
+
+        // Show a specific screen
+        function showScreen(screenId) {
+            // Hide all screens
+            loginScreen.classList.remove('active');
+            registerScreen.classList.remove('active');
+            welcomeScreen.classList.remove('active');
+            quizScreen.classList.remove('active');
+            resultsScreen.classList.remove('active');
+            
+            // Show the requested screen
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // Setup form validation
+        function setupFormValidation() {
+            // Login form validation
+            document.getElementById('loginEmail').addEventListener('blur', validateEmailField);
+            document.getElementById('loginPassword').addEventListener('blur', validatePasswordField);
+            
+            // Registration form validation
+            document.getElementById('registerName').addEventListener('blur', validateNameField);
+            document.getElementById('registerEmail').addEventListener('blur', validateEmailField);
+            document.getElementById('registerPassword').addEventListener('blur', validatePasswordField);
+            document.getElementById('registerConfirmPassword').addEventListener('blur', validateConfirmPasswordField);
+        }
+
+        // Validate email field
+        function validateEmailField(e) {
+            const field = e.target;
+            const email = field.value.trim();
+            const errorElement = document.getElementById(field.id + 'Error');
+            
+            if (!email) {
+                showError(errorElement, 'Email is required');
+                return false;
+            }
+            
+            if (!isValidEmail(email)) {
+                showError(errorElement, 'Please enter a valid email address');
+                return false;
+            }
+            
+            hideError(errorElement);
+            return true;
+        }
+
+        // Validate password field
+        function validatePasswordField(e) {
+            const field = e.target;
+            const password = field.value;
+            const errorElement = document.getElementById(field.id + 'Error');
+            
+            if (!password) {
+                showError(errorElement, 'Password is required');
+                return false;
+            }
+            
+            if (password.length < 6) {
+                showError(errorElement, 'Password must be at least 6 characters');
+                return false;
+            }
+            
+            hideError(errorElement);
+            return true;
+        }
+
+        // Validate name field
+        function validateNameField(e) {
+            const field = e.target;
+            const name = field.value.trim();
+            const errorElement = document.getElementById(field.id + 'Error');
+            
+            if (!name) {
+                showError(errorElement, 'Name is required');
+                return false;
+            }
+            
+            hideError(errorElement);
+            return true;
+        }
+
+        // Validate confirm password field
+        function validateConfirmPasswordField(e) {
+            const field = e.target;
+            const confirmPassword = field.value;
+            const password = document.getElementById('registerPassword').value;
+            const errorElement = document.getElementById(field.id + 'Error');
+            
+            if (confirmPassword !== password) {
+                showError(errorElement, 'Passwords do not match');
+                return false;
+            }
+            
+            hideError(errorElement);
+            return true;
+        }
+
+        // Show error message
+        function showError(errorElement, message) {
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+
+        // Hide error message
+        function hideError(errorElement) {
+            errorElement.style.display = 'none';
+        }
+
+        // Check if email is valid
+        function isValidEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
         }
 
         // Handle login form submission
-        function handleLogin(e) {
-            e.preventDefault();
+        function handleLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
             
-            const username = document.getElementById('username').value;
-            const email = document.getElementById('email').value;
+            // Validate form
+            const isEmailValid = validateEmailField({target: document.getElementById('loginEmail')});
+            const isPasswordValid = validatePasswordField({target: document.getElementById('loginPassword')});
             
-            if (username && email) {
-                // Save user info
+            if (!isEmailValid || !isPasswordValid) {
+                return;
+            }
+            
+            // Check if user exists in localStorage
+            const users = JSON.parse(localStorage.getItem('scienceQuizUsers') || '[]');
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                // Login successful
                 currentUser = {
-                    username,
-                    email,
-                    avatar: username.charAt(0).toUpperCase()
+                    username: user.username,
+                    email: user.email,
+                    avatar: user.username.charAt(0).toUpperCase()
                 };
                 
                 // Save to localStorage
@@ -492,13 +726,63 @@
                 
                 // Show welcome screen
                 showWelcomeScreen();
+            } else {
+                // Login failed
+                alert('Invalid email or password. Please try again or register for a new account.');
             }
+        }
+
+        // Handle registration form submission
+        function handleRegister() {
+            const name = document.getElementById('registerName').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            
+            // Validate form
+            const isNameValid = validateNameField({target: document.getElementById('registerName')});
+            const isEmailValid = validateEmailField({target: document.getElementById('registerEmail')});
+            const isPasswordValid = validatePasswordField({target: document.getElementById('registerPassword')});
+            const isConfirmPasswordValid = validateConfirmPasswordField({target: document.getElementById('registerConfirmPassword')});
+            
+            if (!isNameValid || !isEmailValid || !isPasswordValid || !isConfirmPasswordValid) {
+                return;
+            }
+            
+            // Check if user already exists
+            const users = JSON.parse(localStorage.getItem('scienceQuizUsers') || '[]');
+            if (users.some(user => user.email === email)) {
+                alert('This email is already registered. Please login instead.');
+                return;
+            }
+            
+            // Create new user
+            const newUser = {
+                username: name,
+                email: email,
+                password: password
+            };
+            
+            // Save user
+            users.push(newUser);
+            localStorage.setItem('scienceQuizUsers', JSON.stringify(users));
+            
+            // Auto login
+            currentUser = {
+                username: name,
+                email: email,
+                avatar: name.charAt(0).toUpperCase()
+            };
+            
+            localStorage.setItem('scienceQuizUser', JSON.stringify(currentUser));
+            
+            // Show welcome screen
+            showWelcomeScreen();
         }
 
         // Show welcome screen
         function showWelcomeScreen() {
-            loginScreen.style.display = 'none';
-            welcomeScreen.style.display = 'block';
+            showScreen('welcomeScreen');
             displayName.textContent = currentUser.username;
             
             // Update user info panel
@@ -514,19 +798,16 @@
             
             // Reset UI
             userInfo.style.display = 'none';
-            welcomeScreen.style.display = 'none';
-            quizScreen.style.display = 'none';
-            resultsScreen.style.display = 'none';
-            loginScreen.style.display = 'block';
+            showScreen('loginScreen');
             
-            // Reset form
-            loginForm.reset();
+            // Clear form fields
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
         }
 
         // Start the quiz
         function startQuiz() {
-            welcomeScreen.style.display = 'none';
-            quizScreen.style.display = 'block';
+            showScreen('quizScreen');
             initQuiz();
         }
 
@@ -583,7 +864,7 @@
             
             // Update navigation buttons
             prevBtn.disabled = currentQuestion === 0;
-            nextBtn.textContent = currentQuestion === questions.length - 1 ? 'Finish' : 'Next';
+            nextBtn.textContent = currentQuestion === questions.length - 1 ? 'Finish Quiz' : 'Next Question';
         }
 
         // Select an option
@@ -645,40 +926,13 @@
                 message.textContent = "Keep studying science! You'll do better next time!";
             }
             
-            // Generate question review
-            generateQuestionReview();
-            
             // Show results screen
-            quizScreen.style.display = 'none';
-            resultsScreen.style.display = 'block';
-        }
-
-        // Generate question review
-        function generateQuestionReview() {
-            questionReview.innerHTML = '<h3>Question Review:</h3>';
-            
-            questions.forEach((question, index) => {
-                const reviewItem = document.createElement('div');
-                reviewItem.className = 'review-item';
-                
-                const userAnswer = userAnswers[index];
-                const isCorrect = userAnswer === question.answer;
-                
-                reviewItem.innerHTML = `
-                    <div class="review-question">${index + 1}. ${question.question}</div>
-                    <div>Your answer: <span class="${isCorrect ? 'review-answer' : 'review-incorrect'}">${question.options[userAnswer] || 'Not answered'}</span></div>
-                    ${!isCorrect ? `<div>Correct answer: <span class="review-answer">${question.options[question.answer]}</span></div>` : ''}
-                    <div>Explanation: ${question.explanation}</div>
-                `;
-                
-                questionReview.appendChild(reviewItem);
-            });
+            showScreen('resultsScreen');
         }
 
         // Restart the quiz
         function restartQuiz() {
-            resultsScreen.style.display = 'none';
-            quizScreen.style.display = 'block';
+            showScreen('quizScreen');
             initQuiz();
         }
 
