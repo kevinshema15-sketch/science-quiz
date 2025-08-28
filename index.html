@@ -1,12 +1,26 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Science Quiz Challenge</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>ScienceMaster Pro - Interactive Quiz Platform</title>
+    <meta name="description" content="Test your science knowledge with our professional interactive quiz platform. Challenge yourself with timed questions across multiple science disciplines.">
+    <meta name="keywords" content="science quiz, education, physics, chemistry, biology, astronomy, interactive learning">
+    <meta name="author" content="ScienceMaster Pro">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧪</text></svg>">
     <style>
+        :root {
+            --primary: #4c6ef5;
+            --secondary: #3b5bdb;
+            --success: #40c057;
+            --danger: #fa5252;
+            --warning: #ff922b;
+            --dark: #2c3e50;
+            --light: #f8f9fa;
+            --gradient-start: #667eea;
+            --gradient-end: #764ba2;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -15,1162 +29,867 @@
         }
 
         body {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            color: #333;
+            line-height: 1.6;
         }
-        
+
         .container {
-            background-color: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 500px;
+            max-width: 800px;
             overflow: hidden;
+            animation: slideUp 0.6s ease-out;
         }
-        
-        header {
-            background: linear-gradient(135deg, #4ca1af 0%, #2c3e50 100%);
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
-            padding: 25px;
+            padding: 30px;
             text-align: center;
         }
-        
-        h1 {
-            font-size: 2.2rem;
+
+        .header h1 {
+            font-size: 2.8rem;
             margin-bottom: 10px;
+            font-weight: 700;
         }
-        
-        .subtitle {
-            font-size: 1.1rem;
+
+        .header p {
+            font-size: 1.2rem;
             opacity: 0.9;
         }
-        
-        .app-content {
+
+        .content {
+            padding: 40px;
+        }
+
+        /* Auth Section */
+        .auth-section {
+            text-align: center;
             padding: 30px;
         }
-        
-        .form-screen, .welcome-screen, .quiz-screen, .results-screen {
-            display: none;
-            text-align: center;
+
+        .auth-form {
+            max-width: 400px;
+            margin: 0 auto;
         }
-        
-        .active {
-            display: block;
-        }
-        
+
         .form-group {
             margin-bottom: 20px;
-            text-align: left;
         }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #444;
-        }
-        
-        input {
+
+        .form-input {
             width: 100%;
-            padding: 14px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
         }
-        
-        input:focus {
-            border-color: #4ca1af;
+
+        .form-input:focus {
             outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(76, 110, 245, 0.1);
         }
-        
-        .input-icon {
-            position: relative;
-        }
-        
-        .input-icon i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #777;
-        }
-        
-        .input-icon input {
-            padding-left: 45px;
-        }
-        
-        .error-message {
-            color: #e74c3c;
-            font-size: 0.9rem;
-            margin-top: 5px;
-            text-align: left;
-            display: none;
-        }
-        
+
         .btn {
-            padding: 14px 25px;
-            background: linear-gradient(135deg, #4ca1af 0%, #2c3e50 100%);
-            color: white;
+            padding: 15px 30px;
             border: none;
-            border-radius: 50px;
-            font-size: 1rem;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin: 10px 5px;
-            width: 100%;
+            margin: 5px;
         }
-        
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
         }
-        
-        .btn:active {
-            transform: translateY(0);
+
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
         }
-        
-        .btn-secondary {
-            background: #f8f9fa;
-            color: #444;
-            border: 1px solid #ddd;
+
+        .btn-success {
+            background: var(--success);
+            color: white;
         }
-        
-        .toggle-form {
-            margin-top: 20px;
-            font-size: 0.95rem;
-            color: #666;
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
         }
-        
-        .toggle-form a {
-            color: #4ca1af;
-            text-decoration: none;
-            font-weight: 600;
-            cursor: pointer;
+
+        /* Quiz Section */
+        .quiz-section {
+            display: none;
         }
-        
-        .welcome-screen p {
-            margin: 20px 0;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: #555;
-        }
-        
-        .progress {
-            height: 10px;
-            background: #f0f0f0;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-        
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(135deg, #4ca1af 0%, #2c3e50 100%);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-        
-        .timer {
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            color: #2c3e50;
-            font-weight: bold;
-        }
-        
-        .question-number {
-            font-size: 1rem;
-            margin-bottom: 5px;
-            color: #666;
-        }
-        
-        .question-text {
-            font-size: 1.4rem;
-            margin-bottom: 25px;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-        
-        .options {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
+
+        .progress-container {
             margin-bottom: 30px;
         }
-        
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            transition: width 0.3s ease;
+        }
+
+        .timer-container {
+            text-align: center;
+            margin: 25px 0;
+        }
+
+        .timer {
+            display: inline-block;
+            padding: 12px 25px;
+            background: var(--primary);
+            color: white;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1.3rem;
+            min-width: 90px;
+            transition: all 0.3s ease;
+        }
+
+        .timer.warning {
+            background: var(--warning);
+        }
+
+        .timer.danger {
+            background: var(--danger);
+            animation: pulse 0.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .question-container {
+            margin-bottom: 30px;
+        }
+
+        .question {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .options {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
         .option {
-            padding: 15px;
-            background: #f8f8f8;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
+            padding: 20px;
+            background: var(--light);
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: left;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 500;
         }
-        
+
         .option:hover {
-            background: #eef;
-            border-color: #4ca1af;
+            background: #e9ecef;
+            transform: translateY(-2px);
+            border-color: var(--primary);
         }
-        
+
         .option.selected {
-            background: #d1ecf1;
-            border-color: #0c5460;
+            background: var(--primary);
+            color: white;
+            border-color: var(--secondary);
         }
-        
+
         .option.correct {
-            background: #d4edda;
-            border-color: #28a745;
+            background: var(--success);
+            color: white;
+            border-color: #2f9e44;
         }
-        
+
         .option.incorrect {
-            background: #f8d7da;
-            border-color: #dc3545;
+            background: var(--danger);
+            color: white;
+            border-color: #e03131;
         }
-        
+
+        .feedback {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: 600;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feedback.correct {
+            background: #d3f9d8;
+            color: #2b8a3e;
+        }
+
+        .feedback.incorrect {
+            background: #ffe3e3;
+            color: #c92a2a;
+        }
+
         .navigation {
             display: flex;
             justify-content: space-between;
+            gap: 15px;
         }
-        
-        .score-text {
-            font-size: 1.8rem;
-            margin: 20px 0;
-            color: #2c3e50;
-        }
-        
-        .score-value {
-            font-size: 3rem;
-            font-weight: bold;
-            color: #4ca1af;
-            margin-bottom: 30px;
-        }
-        
-        .message {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-            line-height: 1.6;
-            color: #555;
-        }
-        
-        .user-info {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: white;
-            padding: 10px 15px;
-            border-radius: 50px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .avatar {
-            width: 30px;
-            height: 30px;
-            background: linear-gradient(135deg, #4ca1af 0%, #2c3e50 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-        }
-        
-        .logout-btn {
-            background: none;
-            border: none;
-            color: #667eea;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-        
-        .leaderboard {
-            margin-top: 20px;
-            text-align: left;
-        }
-        
-        .leaderboard h3 {
-            margin-bottom: 15px;
-            color: #2c3e50;
-        }
-        
-        .leaderboard-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .leaderboard-rank {
-            font-weight: bold;
-            color: #4ca1af;
-        }
-        
-        .loading {
+
+        /* Results Section */
+        .results-section {
             display: none;
             text-align: center;
+            padding: 40px;
+        }
+
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 20px 0;
+            animation: bounce 0.6s ease;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-20px);}
+            60% {transform: translateY(-10px);}
+        }
+
+        .score-message {
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin-bottom: 30px;
+        }
+
+        .share-buttons {
             margin: 20px 0;
         }
-        
-        .loading-spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #4ca1af;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
+
+        /* User Info */
+        .user-info {
+            background: #e7f5ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+            animation: fadeIn 0.3s ease;
         }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        @media (max-width: 600px) {
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
             .container {
-                border-radius: 10px;
+                margin: 10px;
+                border-radius: 15px;
             }
             
-            h1 {
-                font-size: 1.8rem;
-            }
-            
-            .app-content {
+            .header {
                 padding: 20px;
             }
             
-            .question-text {
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .question {
                 font-size: 1.2rem;
             }
             
-            .user-info {
-                top: 10px;
-                right: 10px;
-                font-size: 0.9rem;
+            .navigation {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+
+        /* Confetti Animation */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #ff0000;
+            opacity: 0;
+            pointer-events: none;
+            animation: confetti-fall 5s linear forwards;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
             }
         }
     </style>
 </head>
 <body>
-    <div class="user-info" id="userInfo" style="display: none;">
-        <div class="avatar" id="userAvatar"></div>
-        <span id="userName"></span>
-        <button class="logout-btn" id="logoutBtn">Logout</button>
-    </div>
-
     <div class="container">
-        <header>
-            <h1>Science Quiz Challenge</h1>
-            <p class="subtitle">Test your knowledge of scientific concepts</p>
-        </header>
-        
-        <div class="app-content">
-            <!-- Login Screen -->
-            <div class="form-screen active" id="loginScreen">
-                <h2>Login to Your Account</h2>
-                <p>Enter your credentials to access the quiz</p>
+        <div class="header">
+            <h1>🧪 ScienceMaster Pro</h1>
+            <p>Test Your Scientific Knowledge Like a Pro</p>
+        </div>
+
+        <div class="content">
+            <!-- Auth Section -->
+            <div id="auth-section" class="auth-section">
+                <h2>🔐 Welcome to ScienceMaster</h2>
+                <p>Login or register to start your scientific journey</p>
                 
-                <div class="form-group">
-                    <label for="loginUsername">Username</label>
-                    <div class="input-icon">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="loginUsername" placeholder="Enter your username" required>
+                <div class="auth-form">
+                    <div class="form-group">
+                        <input type="text" id="username" class="form-input" placeholder="👤 Username" required>
                     </div>
-                    <div class="error-message" id="loginUsernameError"></div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="loginPassword">Password</label>
-                    <div class="input-icon">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                    <div class="form-group">
+                        <input type="password" id="password" class="form-input" placeholder="🔒 Password" required>
                     </div>
-                    <div class="error-message" id="loginPasswordError"></div>
-                </div>
-                
-                <div class="loading" id="loginLoading">
-                    <div class="loading-spinner"></div>
-                    <p>Logging in...</p>
-                </div>
-                
-                <button class="btn" id="loginBtn">Login</button>
-                
-                <div class="toggle-form">
-                    Don't have an account? <a id="showRegister">Register now</a>
+                    <div>
+                        <button class="btn btn-primary" onclick="login()">🚀 Login</button>
+                        <button class="btn btn-success" onclick="register()">📝 Register</button>
+                    </div>
                 </div>
             </div>
-            
-            <!-- Registration Screen -->
-            <div class="form-screen" id="registerScreen">
-                <h2>Create an Account</h2>
-                <p>Register to start the science quiz</p>
-                
-                <div class="form-group">
-                    <label for="registerUsername">Username</label>
-                    <div class="input-icon">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="registerUsername" placeholder="Choose a username" required>
-                    </div>
-                    <div class="error-message" id="registerUsernameError"></div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="registerEmail">Email Address</label>
-                    <div class="input-icon">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" id="registerEmail" placeholder="Enter your email" required>
-                    </div>
-                    <div class="error-message" id="registerEmailError"></div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="registerPassword">Password</label>
-                    <div class="input-icon">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="registerPassword" placeholder="Create a password" required>
-                    </div>
-                    <div class="error-message" id="registerPasswordError"></div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="registerConfirmPassword">Confirm Password</label>
-                    <div class="input-icon">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="registerConfirmPassword" placeholder="Confirm your password" required>
-                    </div>
-                    <div class="error-message" id="registerConfirmPasswordError"></div>
-                </div>
-                
-                <div class="loading" id="registerLoading">
-                    <div class="loading-spinner"></div>
-                    <p>Creating account...</p>
-                </div>
-                
-                <button class="btn" id="registerBtn">Register</button>
-                
-                <div class="toggle-form">
-                    Already have an account? <a id="showLogin">Login here</a>
-                </div>
+
+            <!-- User Info -->
+            <div id="user-info" class="user-info">
+                👋 Welcome, <span id="player-name"></span>!
+                <button class="btn btn-danger" onclick="logout()" style="margin-left: 10px; padding: 8px 15px;">🚪 Logout</button>
             </div>
-            
-            <!-- Welcome Screen -->
-            <div class="welcome-screen" id="welcomeScreen">
-                <h2>Welcome, <span id="displayName"></span>!</h2>
-                <p>This quiz will test your knowledge across various scientific disciplines including physics, chemistry, biology, and astronomy.</p>
-                <p>You will be presented with 10 multiple-choice questions. Select the best answer for each question and see how well you score at the end!</p>
-                
-                <div class="leaderboard" id="welcomeLeaderboard">
-                    <h3>Top Scores</h3>
-                    <div id="leaderboardContent"></div>
+
+            <!-- Quiz Section -->
+            <div id="quiz-section" class="quiz-section">
+                <div class="progress-container">
+                    <div class="progress-info">
+                        <span id="question-counter">Question 1 of 15</span>
+                        <span id="score-display">Score: 0</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-bar"></div>
+                    </div>
                 </div>
-                
-                <button class="btn" id="startBtn">Start Quiz</button>
-                <button class="btn btn-secondary" id="viewProfileBtn">View My Profile</button>
-            </div>
-            
-            <!-- Quiz Screen -->
-            <div class="quiz-screen" id="quizScreen">
-                <div class="progress">
-                    <div class="progress-bar" id="progressBar"></div>
+
+                <div class="timer-container">
+                    <div class="timer" id="timer">30s</div>
                 </div>
-                <div class="timer" id="timer">Time: 00:00</div>
-                <div class="question-number" id="questionNumber">Question 1 of 10</div>
-                <div class="question-text" id="questionText"></div>
-                
-                <div class="options" id="optionsContainer"></div>
-                
+
+                <div class="question-container">
+                    <div class="question" id="question"></div>
+                    <div class="options" id="options"></div>
+                </div>
+
+                <div class="feedback" id="feedback"></div>
+
                 <div class="navigation">
-                    <button class="btn btn-secondary" id="prevBtn">Previous</button>
-                    <button class="btn" id="nextBtn">Next Question</button>
+                    <button class="btn" id="prev-btn" onclick="goToPreviousQuestion()" disabled>◀ Previous</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="goToNextQuestion()">Next Question ▶</button>
                 </div>
             </div>
-            
-            <!-- Results Screen -->
-            <div class="results-screen" id="resultsScreen">
-                <h2>Quiz Completed!</h2>
-                <div class="score-text">Your Score:</div>
-                <div class="score-value" id="scoreValue">0/10</div>
-                <div class="message" id="message">Thanks for taking the Science Quiz Challenge!</div>
+
+            <!-- Results Section -->
+            <div id="results-section" class="results-section">
+                <h2>🎉 Quiz Completed!</h2>
+                <p>Your scientific knowledge has been tested!</p>
                 
-                <div class="loading" id="saveScoreLoading">
-                    <div class="loading-spinner"></div>
-                    <p>Saving your score...</p>
+                <div class="score-display" id="final-score"></div>
+                <div class="score-message" id="score-message"></div>
+
+                <div class="share-buttons">
+                    <button class="btn btn-primary" onclick="shareScore()">📤 Share Score</button>
+                    <button class="btn btn-success" onclick="restartQuiz()">🔄 Play Again</button>
+                    <button class="btn" onclick="showLeaderboard()">🏆 View Leaderboard</button>
                 </div>
-                
-                <button class="btn" id="restartBtn">Try Again</button>
-                <button class="btn btn-secondary" id="viewLeaderboardBtn">View Leaderboard</button>
-            </div>
-            
-            <!-- Profile Screen -->
-            <div class="results-screen" id="profileScreen">
-                <h2>Your Profile</h2>
-                <div id="profileContent"></div>
-                <button class="btn" id="backToWelcomeBtn">Back to Welcome</button>
             </div>
         </div>
     </div>
 
     <script>
         // ==================== CONFIGURATION ====================
-        const API_BASE_URL = 'http://localhost:5000'; // Change this in production
-        
-        // ==================== QUIZ QUESTIONS ====================
-        const questions = [
+        const SERVER_URL = 'http://localhost:5000';
+        const QUESTIONS = [
+            {
+                question: "How many elements are in the periodic table?",
+                options: ["116", "117", "118", "119"],
+                answer: 2,
+                category: "Chemistry"
+            },
+            {
+                question: "Which animal lays the largest eggs?",
+                options: ["Whale", "Crocodile", "Elephant", "Ostrich"],
+                answer: 3,
+                category: "Biology"
+            },
+            {
+                question: "What is the most abundant gas in Earth's atmosphere?",
+                options: ["Nitrogen", "Oxygen", "Carbon-Dioxide", "Hydrogen"],
+                answer: 0,
+                category: "Earth Science"
+            },
+            {
+                question: "How many bones are in the human body?",
+                options: ["206", "207", "208", "209"],
+                answer: 0,
+                category: "Biology"
+            },
+            {
+                question: "Which planet in the solar system is the hottest?",
+                options: ["Mercury", "Venus", "Earth", "Mars"],
+                answer: 1,
+                category: "Astronomy"
+            },
             {
                 question: "What is the chemical symbol for gold?",
-                options: ["Au", "Ag", "Fe", "Go"],
-                answer: 0,
-                explanation: "Gold's chemical symbol is Au, derived from the Latin word 'aurum' meaning gold."
-            },
-            {
-                question: "Which planet is known as the Red Planet?",
-                options: ["Venus", "Mars", "Jupiter", "Saturn"],
-                answer: 1,
-                explanation: "Mars is often called the Red Planet due to its reddish appearance, which is caused by iron oxide (rust) on its surface."
-            },
-            {
-                question: "What is the smallest unit of life?",
-                options: ["Atom", "Cell", "Molecule", "Organelle"],
-                answer: 1,
-                explanation: "The cell is the smallest unit of life that can replicate independently, and is often called the 'building block of life'."
-            },
-            {
-                question: "What is the speed of light in a vacuum?",
-                options: ["299,792 km/s", "150,000 km/s", "450,000 km/s", "100,000 km/s"],
-                answer: 0,
-                explanation: "The speed of light in a vacuum is exactly 299,792 kilometers per second, which is a fundamental constant in physics."
-            },
-            {
-                question: "Which gas do plants absorb from the atmosphere?",
-                options: ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"],
+                options: ["Go", "Gd", "Au", "Ag"],
                 answer: 2,
-                explanation: "Plants absorb carbon dioxide (CO₂) from the atmosphere during photosynthesis to produce glucose and oxygen."
+                category: "Chemistry"
             },
             {
-                question: "What is the main component of the Sun?",
-                options: ["Helium", "Hydrogen", "Oxygen", "Carbon"],
+                question: "How many planets are in our solar system?",
+                options: ["7", "8", "9", "10"],
                 answer: 1,
-                explanation: "The Sun is primarily composed of hydrogen (about 74% by mass) which fuels the nuclear fusion reactions at its core."
+                category: "Astronomy"
             },
             {
-                question: "Which subatomic particle has a negative charge?",
-                options: ["Proton", "Neutron", "Electron", "Photon"],
+                question: "What is the speed of light in vacuum?",
+                options: ["300,000 km/s", "150,000 km/s", "450,000 km/s", "600,000 km/s"],
+                answer: 0,
+                category: "Physics"
+            },
+            {
+                question: "What force keeps planets in orbit around the sun?",
+                options: ["Magnetism", "Gravity", "Electricity", "Friction"],
+                answer: 1,
+                category: "Physics"
+            },
+            {
+                question: "What is the most abundant element in the universe?",
+                options: ["Oxygen", "Carbon", "Hydrogen", "Helium"],
                 answer: 2,
-                explanation: "Electrons carry a negative electric charge, while protons are positively charged and neutrons have no charge."
+                category: "Chemistry"
+            },
+            {
+                question: "How many chromosomes do humans have?",
+                options: ["23", "46", "52", "64"],
+                answer: 1,
+                category: "Biology"
+            },
+            {
+                question: "Which organ pumps blood throughout the body?",
+                options: ["Liver", "Heart", "Brain", "Lungs"],
+                answer: 1,
+                category: "Biology"
             },
             {
                 question: "What is the hardest natural substance on Earth?",
                 options: ["Gold", "Iron", "Diamond", "Platinum"],
                 answer: 2,
-                explanation: "Diamond is the hardest known natural material, scoring a 10 on the Mohs scale of mineral hardness."
+                category: "Earth Science"
             },
             {
-                question: "Which scientist proposed the theory of relativity?",
-                options: ["Isaac Newton", "Niels Bohr", "Albert Einstein", "Stephen Hawking"],
-                answer: 2,
-                explanation: "Albert Einstein developed the theory of relativity, which revolutionized our understanding of space, time, and gravity."
+                question: "Which planet has the most moons?",
+                options: ["Jupiter", "Saturn", "Uranus", "Neptune"],
+                answer: 1,
+                category: "Astronomy"
             },
             {
-                question: "What is the pH value of pure water?",
-                options: ["5", "6", "7", "8"],
-                answer: 2,
-                explanation: "Pure water has a pH of 7, which is considered neutral on the pH scale."
+                question: "What is a light-year a measure of?",
+                options: ["Time", "Distance", "Brightness", "Energy"],
+                answer: 1,
+                category: "Astronomy"
             }
         ];
 
-        // ==================== API FUNCTIONS ====================
-        async function apiRequest(endpoint, options = {}) {
-            try {
-                const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        ...options.headers
-                    },
-                    ...options
-                });
-                
-                if (response.status === 401) {
-                    handleLogout();
-                    throw new Error('Please login again');
-                }
-                
-                if (!response.ok) {
-                    const errorData = await response.json().catch(() => ({}));
-                    throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
-                }
-                
-                return await response.json();
-            } catch (error) {
-                console.error(`API request to ${endpoint} failed:`, error);
-                throw error;
-            }
-        }
-
-        async function loginUser(username, password) {
-            return await apiRequest('/login', {
-                method: 'POST',
-                body: JSON.stringify({ username, password })
-            });
-        }
-
-        async function registerUser(username, email, password) {
-            return await apiRequest('/register', {
-                method: 'POST',
-                body: JSON.stringify({ username, email, password })
-            });
-        }
-
-        async function saveScore(score, totalQuestions, timeTaken) {
-            return await apiRequest('/save_score', {
-                method: 'POST',
-                body: JSON.stringify({ 
-                    score, 
-                    total_questions: totalQuestions,
-                    time_taken: timeTaken 
-                })
-            });
-        }
-
-        async function getUserData() {
-            return await apiRequest('/user_data');
-        }
-
-        async function getLeaderboard() {
-            return await apiRequest('/leaderboard');
-        }
+        // ==================== STATE MANAGEMENT ====================
+        let currentQuestion = 0;
+        let score = 0;
+        let userAnswers = new Array(QUESTIONS.length).fill(null);
+        let timer;
+        let timeLeft = 30;
+        let currentUser = null;
 
         // ==================== DOM ELEMENTS ====================
         const elements = {
-            // Screens
-            loginScreen: document.getElementById('loginScreen'),
-            registerScreen: document.getElementById('registerScreen'),
-            welcomeScreen: document.getElementById('welcomeScreen'),
-            quizScreen: document.getElementById('quizScreen'),
-            resultsScreen: document.getElementById('resultsScreen'),
-            profileScreen: document.getElementById('profileScreen'),
-            
-            // Login form
-            loginUsername: document.getElementById('loginUsername'),
-            loginPassword: document.getElementById('loginPassword'),
-            loginBtn: document.getElementById('loginBtn'),
-            loginLoading: document.getElementById('loginLoading'),
-            
-            // Registration form
-            registerUsername: document.getElementById('registerUsername'),
-            registerEmail: document.getElementById('registerEmail'),
-            registerPassword: document.getElementById('registerPassword'),
-            registerConfirmPassword: document.getElementById('registerConfirmPassword'),
-            registerBtn: document.getElementById('registerBtn'),
-            registerLoading: document.getElementById('registerLoading'),
-            
-            // Navigation
-            showRegister: document.getElementById('showRegister'),
-            showLogin: document.getElementById('showLogin'),
-            startBtn: document.getElementById('startBtn'),
-            viewProfileBtn: document.getElementById('viewProfileBtn'),
-            backToWelcomeBtn: document.getElementById('backToWelcomeBtn'),
-            
-            // Quiz elements
-            progressBar: document.getElementById('progressBar'),
+            auth: document.getElementById('auth-section'),
+            userInfo: document.getElementById('user-info'),
+            playerName: document.getElementById('player-name'),
+            quiz: document.getElementById('quiz-section'),
+            results: document.getElementById('results-section'),
+            question: document.getElementById('question'),
+            options: document.getElementById('options'),
+            feedback: document.getElementById('feedback'),
+            prevBtn: document.getElementById('prev-btn'),
+            nextBtn: document.getElementById('next-btn'),
             timer: document.getElementById('timer'),
-            questionNumber: document.getElementById('questionNumber'),
-            questionText: document.getElementById('questionText'),
-            optionsContainer: document.getElementById('optionsContainer'),
-            prevBtn: document.getElementById('prevBtn'),
-            nextBtn: document.getElementById('nextBtn'),
-            
-            // Results elements
-            scoreValue: document.getElementById('scoreValue'),
-            message: document.getElementById('message'),
-            saveScoreLoading: document.getElementById('saveScoreLoading'),
-            restartBtn: document.getElementById('restartBtn'),
-            viewLeaderboardBtn: document.getElementById('viewLeaderboardBtn'),
-            
-            // User info
-            userInfo: document.getElementById('userInfo'),
-            userAvatar: document.getElementById('userAvatar'),
-            userName: document.getElementById('userName'),
-            logoutBtn: document.getElementById('logoutBtn'),
-            displayName: document.getElementById('displayName'),
-            
-            // Leaderboard
-            leaderboardContent: document.getElementById('leaderboardContent'),
-            profileContent: document.getElementById('profileContent')
+            progressBar: document.getElementById('progress-bar'),
+            questionCounter: document.getElementById('question-counter'),
+            scoreDisplay: document.getElementById('score-display'),
+            finalScore: document.getElementById('final-score'),
+            scoreMessage: document.getElementById('score-message')
         };
 
-        // ==================== STATE MANAGEMENT ====================
-        let currentQuestion = 0;
-        let userAnswers = new Array(questions.length).fill(null);
-        let quizStarted = false;
-        let startTime;
-        let timerInterval;
-        let currentUser = null;
-
-        // ==================== UTILITY FUNCTIONS ====================
-        function showScreen(screenId) {
-            // Hide all screens
-            Object.values(elements).forEach(element => {
-                if (element && element.classList && 
-                    ['loginScreen', 'registerScreen', 'welcomeScreen', 'quizScreen', 'resultsScreen', 'profileScreen']
-                    .includes(element.id)) {
-                    element.classList.remove('active');
+        // ==================== AUTHENTICATION ====================
+        async function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (!validateInput(username, password)) return;
+            
+            try {
+                const response = await fetch(`${SERVER_URL}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    currentUser = data.username;
+                    showQuiz();
+                    showNotification('Login successful! 🎉', 'success');
+                } else {
+                    showNotification(data.error, 'error');
                 }
-            });
+            } catch (error) {
+                showNotification('Server connection failed. Ensure backend is running.', 'error');
+            }
+        }
+
+        async function register() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
             
-            // Show the requested screen
-            if (elements[screenId]) {
-                elements[screenId].classList.add('active');
-            }
-        }
-
-        function showLoading(loadingElement, show) {
-            if (loadingElement) {
-                loadingElement.style.display = show ? 'block' : 'none';
-            }
-        }
-
-        function showError(errorElement, message) {
-            if (errorElement) {
-                errorElement.textContent = message;
-                errorElement.style.display = 'block';
-            }
-        }
-
-        function hideError(errorElement) {
-            if (errorElement) {
-                errorElement.style.display = 'none';
-            }
-        }
-
-        function isValidEmail(email) {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(email);
-        }
-
-        // ==================== EVENT HANDLERS ====================
-        async function handleLogin() {
-            const username = elements.loginUsername.value.trim();
-            const password = elements.loginPassword.value;
-            
-            // Basic validation
-            if (!username) {
-                showError(elements.loginUsernameError, 'Username is required');
-                return;
-            }
-            if (!password) {
-                showError(elements.loginPasswordError, 'Password is required');
-                return;
-            }
+            if (!validateInput(username, password)) return;
             
             try {
-                showLoading(elements.loginLoading, true);
-                hideError(elements.loginUsernameError);
-                hideError(elements.loginPasswordError);
+                const response = await fetch(`${SERVER_URL}/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
                 
-                const data = await loginUser(username, password);
+                const data = await response.json();
                 
-                // Login successful
-                currentUser = {
-                    username: data.username,
-                    email: data.email || '',
-                    avatar: data.username.charAt(0).toUpperCase()
-                };
-                
-                // Update UI
-                elements.displayName.textContent = currentUser.username;
-                elements.userName.textContent = currentUser.username;
-                elements.userAvatar.textContent = currentUser.avatar;
-                elements.userInfo.style.display = 'flex';
-                
-                // Load leaderboard data
-                await loadLeaderboard();
-                
-                // Show welcome screen
-                showScreen('welcomeScreen');
-                
+                if (response.status === 201) {
+                    showNotification('Registration successful! Please login.', 'success');
+                } else {
+                    showNotification(data.error, 'error');
+                }
             } catch (error) {
-                showError(elements.loginPasswordError, error.message || 'Login failed. Please try again.');
-            } finally {
-                showLoading(elements.loginLoading, false);
+                showNotification('Server connection failed.', 'error');
             }
         }
 
-        async function handleRegister() {
-            const username = elements.registerUsername.value.trim();
-            const email = elements.registerEmail.value.trim();
-            const password = elements.registerPassword.value;
-            const confirmPassword = elements.registerConfirmPassword.value;
-            
-            // Validation
-            if (!username) {
-                showError(elements.registerUsernameError, 'Username is required');
-                return;
-            }
-            if (!email || !isValidEmail(email)) {
-                showError(elements.registerEmailError, 'Please enter a valid email address');
-                return;
-            }
-            if (!password || password.length < 6) {
-                showError(elements.registerPasswordError, 'Password must be at least 6 characters');
-                return;
-            }
-            if (password !== confirmPassword) {
-                showError(elements.registerConfirmPasswordError, 'Passwords do not match');
-                return;
-            }
-            
-            try {
-                showLoading(elements.registerLoading, true);
-                // Clear any previous errors
-                hideError(elements.registerUsernameError);
-                hideError(elements.registerEmailError);
-                hideError(elements.registerPasswordError);
-                hideError(elements.registerConfirmPasswordError);
-                
-                const data = await registerUser(username, email, password);
-                
-                // Registration successful, now login
-                await handleAutoLogin(username, password);
-                
-            } catch (error) {
-                showError(elements.registerUsernameError, error.message || 'Registration failed. Please try again.');
-            } finally {
-                showLoading(elements.registerLoading, false);
-            }
-        }
-
-        async function handleAutoLogin(username, password) {
-            try {
-                const data = await loginUser(username, password);
-                
-                // Login successful
-                currentUser = {
-                    username: data.username,
-                    email: data.email || '',
-                    avatar: data.username.charAt(0).toUpperCase()
-                };
-                
-                // Update UI
-                elements.displayName.textContent = currentUser.username;
-                elements.userName.textContent = currentUser.username;
-                elements.userAvatar.textContent = currentUser.avatar;
-                elements.userInfo.style.display = 'flex';
-                
-                // Load leaderboard data
-                await loadLeaderboard();
-                
-                // Show welcome screen
-                showScreen('welcomeScreen');
-                
-            } catch (error) {
-                showError(elements.loginPasswordError, 'Auto login failed. Please login manually.');
-                showScreen('loginScreen');
-            }
-        }
-
-        function handleLogout() {
+        function logout() {
             currentUser = null;
+            elements.auth.style.display = 'block';
             elements.userInfo.style.display = 'none';
-            showScreen('loginScreen');
-            
-            // Clear form fields
-            elements.loginUsername.value = '';
-            elements.loginPassword.value = '';
-            elements.registerUsername.value = '';
-            elements.registerEmail.value = '';
-            elements.registerPassword.value = '';
-            elements.registerConfirmPassword.value = '';
-            
-            // Clear errors
-            hideError(elements.loginUsernameError);
-            hideError(elements.loginPasswordError);
-            hideError(elements.registerUsernameError);
-            hideError(elements.registerEmailError);
-            hideError(elements.registerPasswordError);
-            hideError(elements.registerConfirmPasswordError);
+            elements.quiz.style.display = 'none';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            showNotification('Logged out successfully', 'info');
         }
 
         // ==================== QUIZ FUNCTIONS ====================
         function startQuiz() {
             currentQuestion = 0;
+            score = 0;
             userAnswers.fill(null);
-            showScreen('quizScreen');
-            displayQuestion();
+            updateScoreDisplay();
+            showQuestion();
+            elements.quiz.style.display = 'block';
+            elements.results.style.display = 'none';
+        }
+
+        function showQuestion() {
+            const question = QUESTIONS[currentQuestion];
+            elements.question.textContent = question.question;
+            elements.questionCounter.textContent = `Question ${currentQuestion + 1} of ${QUESTIONS.length}`;
+            
+            elements.options.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.textContent = option;
+                
+                if (userAnswers[currentQuestion] === index) {
+                    optionElement.classList.add('selected');
+                    if (index === question.answer) optionElement.classList.add('correct');
+                    else optionElement.classList.add('incorrect');
+                }
+                
+                optionElement.addEventListener('click', () => selectOption(index));
+                elements.options.appendChild(optionElement);
+            });
+            
+            updateNavigation();
             updateProgressBar();
             startTimer();
         }
 
-        function startTimer() {
-            startTime = new Date();
-            timerInterval = setInterval(updateTimer, 1000);
-        }
-
-        function updateTimer() {
-            const currentTime = new Date();
-            const elapsedTime = new Date(currentTime - startTime);
-            const minutes = elapsedTime.getMinutes().toString().padStart(2, '0');
-            const seconds = elapsedTime.getSeconds().toString().padStart(2, '0');
-            elements.timer.textContent = `Time: ${minutes}:${seconds}`;
-        }
-
-        function stopTimer() {
-            clearInterval(timerInterval);
-        }
-
-        function displayQuestion() {
-            const question = questions[currentQuestion];
-            elements.questionNumber.textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
-            elements.questionText.textContent = question.question;
+        function selectOption(optionIndex) {
+            if (userAnswers[currentQuestion] !== null) return;
             
-            // Clear previous options
-            elements.optionsContainer.innerHTML = '';
+            stopTimer();
+            userAnswers[currentQuestion] = optionIndex;
+            const question = QUESTIONS[currentQuestion];
             
-            // Add new options
-            question.options.forEach((option, index) => {
-                const optionElement = document.createElement('div');
-                optionElement.className = 'option';
-                if (userAnswers[currentQuestion] === index) {
-                    optionElement.classList.add('selected');
-                }
-                optionElement.textContent = option;
-                optionElement.setAttribute('data-index', index);
-                optionElement.addEventListener('click', () => selectOption(index));
-                elements.optionsContainer.appendChild(optionElement);
-            });
+            if (optionIndex === question.answer) {
+                score++;
+                showFeedback('Correct! ✅', 'correct');
+                playSound('correct');
+            } else {
+                showFeedback(`Incorrect! Correct answer: ${question.options[question.answer]}`, 'incorrect');
+                playSound('incorrect');
+            }
             
-            // Update navigation buttons
-            elements.prevBtn.disabled = currentQuestion === 0;
-            elements.nextBtn.textContent = currentQuestion === questions.length - 1 ? 'Finish Quiz' : 'Next Question';
+            updateScoreDisplay();
+            updateNavigation();
         }
 
-        function selectOption(index) {
-            userAnswers[currentQuestion] = index;
-            
-            // Update UI to show selected option
-            const options = elements.optionsContainer.querySelectorAll('.option');
-            options.forEach(option => option.classList.remove('selected'));
-            options[index].classList.add('selected');
-        }
-
-        function nextQuestion() {
-            if (currentQuestion < questions.length - 1) {
+        function goToNextQuestion() {
+            stopTimer();
+            if (currentQuestion < QUESTIONS.length - 1) {
                 currentQuestion++;
-                displayQuestion();
-                updateProgressBar();
+                showQuestion();
             } else {
                 finishQuiz();
             }
         }
 
-        function prevQuestion() {
+        function goToPreviousQuestion() {
+            stopTimer();
             if (currentQuestion > 0) {
                 currentQuestion--;
-                displayQuestion();
-                updateProgressBar();
+                showQuestion();
             }
         }
 
-        function updateProgressBar() {
-            const progress = ((currentQuestion + 1) / questions.length) * 100;
-            elements.progressBar.style.width = `${progress}%`;
-        }
-
-        async function finishQuiz() {
+        function finishQuiz() {
             stopTimer();
+            elements.quiz.style.display = 'none';
+            elements.results.style.display = 'block';
             
-            // Calculate score
-            const score = userAnswers.reduce((total, answer, index) => {
-                return total + (answer === questions[index].answer ? 1 : 0);
-            }, 0);
+            const percentage = (score / QUESTIONS.length) * 100;
+            elements.finalScore.textContent = `${score}/${QUESTIONS.length} (${percentage.toFixed(1)}%)`;
             
-            // Calculate time taken in seconds
-            const endTime = new Date();
-            const timeTaken = Math.floor((endTime - startTime) / 1000);
+            let message;
+            if (percentage >= 90) message = "🎓 Scientific Genius!";
+            else if (percentage >= 70) message = "🔬 Great Job!";
+            else if (percentage >= 50) message = "🧪 Good Effort!";
+            else message = "📚 Keep Learning!";
             
-            // Display results
-            elements.scoreValue.textContent = `${score}/${questions.length}`;
+            elements.scoreMessage.textContent = message;
             
-            // Set message based on score
-            if (score === questions.length) {
-                elements.message.textContent = "Perfect! You're a science genius!";
-            } else if (score >= questions.length * 0.7) {
-                elements.message.textContent = "Great job! You have excellent science knowledge!";
-            } else if (score >= questions.length * 0.5) {
-                elements.message.textContent = "Good effort! Keep learning and try again!";
-            } else {
-                elements.message.textContent = "Keep studying science! You'll do better next time!";
-            }
-            
-            // Save score to backend
-            showLoading(elements.saveScoreLoading, true);
-            try {
-                await saveScore(score, questions.length, timeTaken);
-            } catch (error) {
-                console.error('Failed to save score:', error);
-            } finally {
-                showLoading(elements.saveScoreLoading, false);
-            }
-            
-            // Show results screen
-            showScreen('resultsScreen');
+            if (percentage >= 80) createConfetti();
+            saveScore();
         }
 
         function restartQuiz() {
-            showScreen('quizScreen');
+            elements.results.style.display = 'none';
             startQuiz();
         }
 
-        // ==================== LEADERBOARD FUNCTIONS ====================
-        async function loadLeaderboard() {
+        // ==================== TIMER FUNCTIONS ====================
+        function startTimer() {
+            timeLeft = 30;
+            updateTimer();
+            
+            timer = setInterval(() => {
+                timeLeft--;
+                updateTimer();
+                
+                if (timeLeft <= 0) {
+                    stopTimer();
+                    skipQuestion();
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timer);
+        }
+
+        function skipQuestion() {
+            userAnswers[currentQuestion] = null;
+            showFeedback("Time's up! ⏰", 'incorrect');
+            setTimeout(goToNextQuestion, 2000);
+        }
+
+        // ==================== HELPER FUNCTIONS ====================
+        function updateTimer() {
+            elements.timer.textContent = `${timeLeft}s`;
+            elements.timer.className = 'timer';
+            if (timeLeft <= 10) elements.timer.classList.add('danger');
+            else if (timeLeft <= 20) elements.timer.classList.add('warning');
+        }
+
+        function updateProgressBar() {
+            const progress = ((currentQuestion + 1) / QUESTIONS.length) * 100;
+            elements.progressBar.style.width = `${progress}%`;
+        }
+
+        function updateScoreDisplay() {
+            elements.scoreDisplay.textContent = `Score: ${score}`;
+        }
+
+        function updateNavigation() {
+            elements.prevBtn.disabled = currentQuestion === 0;
+            elements.nextBtn.disabled = userAnswers[currentQuestion] === null;
+            elements.nextBtn.textContent = currentQuestion === QUESTIONS.length - 1 ? 'Finish Quiz' : 'Next Question';
+        }
+
+        function showFeedback(message, type) {
+            elements.feedback.textContent = message;
+            elements.feedback.className = `feedback ${type}`;
+        }
+
+        function showQuiz() {
+            elements.auth.style.display = 'none';
+            elements.userInfo.style.display = 'block';
+            elements.playerName.textContent = currentUser;
+            startQuiz();
+        }
+
+        function validateInput(username, password) {
+            if (!username || !password) {
+                showNotification('Please fill in all fields', 'error');
+                return false;
+            }
+            if (username.length < 3) {
+                showNotification('Username must be at least 3 characters', 'error');
+                return false;
+            }
+            if (password.length < 6) {
+                showNotification('Password must be at least 6 characters', 'error');
+                return false;
+            }
+            return true;
+        }
+
+        async function saveScore() {
+            if (!currentUser) return;
+            
             try {
-                const data = await getLeaderboard();
-                displayLeaderboard(data.leaderboard);
+                await fetch(`${SERVER_URL}/save_score`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        score: score, 
+                        total_questions: QUESTIONS.length 
+                    })
+                });
             } catch (error) {
-                console.error('Failed to load leaderboard:', error);
-                elements.leaderboardContent.innerHTML = '<p>Unable to load leaderboard. Please try again later.</p>';
+                console.log('Score not saved');
             }
         }
 
-        function displayLeaderboard(leaderboard) {
-            if (!leaderboard || leaderboard.length === 0) {
-                elements.leaderboardContent.innerHTML = '<p>No scores yet. Be the first to play!</p>';
-                return;
-            }
-            
-            let html = '';
-            leaderboard.forEach((player, index) => {
-                html += `
-                    <div class="leaderboard-item">
-                        <span class="leaderboard-rank">#${index + 1}</span>
-                        <span>${player.username}</span>
-                        <span>${player.high_score} pts</span>
-                    </div>
-                `;
-            });
-            
-            elements.leaderboardContent.innerHTML = html;
+        function showLeaderboard() {
+            showNotification('Leaderboard feature coming soon!', 'info');
         }
 
-        async function viewProfile() {
-            try {
-                const userData = await getUserData();
-                displayProfile(userData);
-                showScreen('profileScreen');
-            } catch (error) {
-                console.error('Failed to load profile:', error);
-                elements.profileContent.innerHTML = '<p>Unable to load profile. Please try again later.</p>';
-                showScreen('profileScreen');
-            }
-        }
-
-        function displayProfile(userData) {
-            let html = `
-                <div style="margin-bottom: 20px;">
-                    <h3>User Information</h3>
-                    <p><strong>Username:</strong> ${userData.username}</p>
-                    <p><strong>High Score:</strong> ${userData.high_score || 0}</p>
-                    <p><strong>Games Played:</strong> ${userData.games_played || 0}</p>
-                </div>
-            `;
-            
-            if (userData.recent_games && userData.recent_games.length > 0) {
-                html += `<h3>Recent Games</h3>`;
-                userData.recent_games.forEach(game => {
-                    html += `
-                        <div class="leaderboard-item">
-                            <span>Score: ${game.score}/${game.total_questions}</span>
-                            <span>Time: ${game.time_taken}s</span>
-                            <span>${new Date(game.timestamp).toLocaleDateString()}</span>
-                        </div>
-                    `;
+        function shareScore() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Science Quiz Score',
+                    text: `I scored ${score}/${QUESTIONS.length} on ScienceMaster Pro! Can you beat me?`,
+                    url: window.location.href
                 });
             } else {
-                html += '<p>No games played yet.</p>';
+                alert(`Share your score: ${score}/${QUESTIONS.length}! Challenge your friends!`);
             }
-            
-            elements.profileContent.innerHTML = html;
+        }
+
+        function playSound(type) {
+            // Sound effects would be implemented here
+            console.log(`${type} sound played`);
+        }
+
+        function showNotification(message, type) {
+            alert(`${type.toUpperCase()}: ${message}`);
+        }
+
+        function createConfetti() {
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.background = `hsl(${Math.random() * 360}, 70%, 50%)`;
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => confetti.remove(), 5000);
+            }
         }
 
         // ==================== INITIALIZATION ====================
-        function initApp() {
-            // Set up event listeners
-            elements.loginBtn.addEventListener('click', handleLogin);
-            elements.registerBtn.addEventListener('click', handleRegister);
-            elements.showRegister.addEventListener('click', () => showScreen('registerScreen'));
-            elements.showLogin.addEventListener('click', () => showScreen('loginScreen'));
-            elements.startBtn.addEventListener('click', startQuiz);
-            elements.viewProfileBtn.addEventListener('click', viewProfile);
-            elements.backToWelcomeBtn.addEventListener('click', () => showScreen('welcomeScreen'));
-            elements.prevBtn.addEventListener('click', prevQuestion);
-// ==================== INITIALIZATION ====================
-function initApp() {
-    // Set up event listeners
-    elements.loginBtn.addEventListener('click', handleLogin);
-    elements.registerBtn.addEventListener('click', handleRegister);
-    elements.showRegister.addEventListener('click', () => showScreen('registerScreen'));
-    elements.showLogin.addEventListener('click', () => showScreen('loginScreen'));
-    elements.startBtn.addEventListener('click', startQuiz);
-    elements.viewProfileBtn.addEventListener('click', viewProfile);
-    elements.backToWelcomeBtn.addEventListener('click', () => showScreen('welcomeScreen'));
-    elements.prevBtn.addEventListener('click', prevQuestion);
-    elements.nextBtn.addEventListener('click', nextQuestion);
-    elements.restartBtn.addEventListener('click', restartQuiz);
-    elements.viewLeaderboardBtn.addEventListener('click', () => {
-        loadLeaderboard();
-        showScreen('welcomeScreen');
-    });
-    elements.logoutBtn.addEventListener('click', handleLogout);
+        function init() {
+            console.log('ScienceMaster Pro initialized');
+            // Check if user is already logged in (optional)
+        }
 
-    // Add keyboard support for login/register forms
-    elements.loginPassword.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') handleLogin();
-    });
-    
-    elements.registerConfirmPassword.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') handleRegister();
-    });
-
-    // Check if user is already logged in (from session)
-    checkExistingSession();
-}
-
-async function checkExistingSession() {
-    try {
-        const userData = await getUserData();
-        
-        // User is already logged in
-        currentUser = {
-            username: userData.username,
-            email: userData.email || '',
-            avatar: userData.username.charAt(0).toUpperCase()
-        };
-        
-        // Update UI
-        elements.displayName.textContent = currentUser.username;
-        elements.userName.textContent = currentUser.username;
-        elements.userAvatar.textContent = currentUser.avatar;
-        elements.userInfo.style.display = 'flex';
-        
-        // Load leaderboard data
-        await loadLeaderboard();
-        
-        // Show welcome screen
-        showScreen('welcomeScreen');
-    } catch (error) {
-        // Not logged in, stay on login screen
-        console.log('No active session found');
-        showScreen('loginScreen');
-    }
-}
-
-// Initialize the app when the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', initApp);
+        // Initialize when page loads
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
